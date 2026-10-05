@@ -4,4 +4,8 @@ import com.takima.backskeleton.models.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AppUserDao extends JpaRepository<AppUser, Long> {
+
+    boolean existsByEmail(String email);
+
+    boolean existsByEmailAndIdNot(String email, Long id);
 }

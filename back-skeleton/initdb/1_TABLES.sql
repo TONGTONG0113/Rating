@@ -1,30 +1,36 @@
-create table students
+CREATE TABLE restaurants
 (
     id SERIAL PRIMARY KEY,
-    first_name TEXT not null,
-    last_name TEXT not null,
-    birthdate date null,
-    major_id int null,
-    image bytea null
+    title TEXT NOT NULL,
+    address TEXT NOT NULL,
+    opening_hours TEXT NOT NULL
 );
 
-create table majors
+CREATE TABLE app_users
 (
     id SERIAL PRIMARY KEY,
-    name TEXT not null,
-    description TEXT not null
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE
 );
 
-create table courses
+CREATE TABLE reviews
 (
     id SERIAL PRIMARY KEY,
-    name TEXT not null,
-    hours int not null
-);
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    summary TEXT NOT NULL,
+    details TEXT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-create table student_course
-(
-    id SERIAL PRIMARY KEY,
-    student_id int not null,
-    course_id int not null
+    user_id INT NOT NULL,
+    restaurant_id INT NOT NULL,
+
+    CONSTRAINT fk_review_user
+        FOREIGN KEY (user_id)
+            REFERENCES app_users(id)
+            ON DELETE CASCADE,
+
+    CONSTRAINT fk_review_restaurant
+        FOREIGN KEY (restaurant_id)
+            REFERENCES restaurants(id)
+            ON DELETE CASCADE
 );

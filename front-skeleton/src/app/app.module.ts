@@ -12,6 +12,7 @@ import { StudentDetailsComponent } from "students/student-details/student-detail
 import { FormsModule } from "@angular/forms"
 import { MatIconModule } from "@angular/material/icon"
 import { MatButtonModule } from "@angular/material/button"
+<<<<<<< Updated upstream
 import { MajorsComponent } from "majors/majors.component"
 import { MajorStudentsComponent } from "majors/major-students/major-students.component"
 import { HttpClientModule } from "@angular/common/http"
@@ -26,6 +27,19 @@ import { HttpClientModule } from "@angular/common/http"
     MajorsComponent,
     MajorStudentsComponent,
   ],
+=======
+
+import { AppRoutingModule } from "./app-routing.module"
+import { AppComponent } from "./app.component"
+import { NavbarComponent } from "./navbar/navbar.component"
+import { HomeComponent } from "./home/home.component"
+import { RestaurantComponent } from "./restaurant/restaurant.component"
+import { RestaurantDetailComponent } from "./restaurant-detail/restaurant-detail.component"
+
+@NgModule({
+  declarations: [AppComponent, NavbarComponent, RestaurantDetailComponent, RestaurantComponent],
+
+>>>>>>> Stashed changes
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -34,9 +48,15 @@ import { HttpClientModule } from "@angular/common/http"
     FormsModule,
     MatIconModule,
     MatButtonModule,
+<<<<<<< Updated upstream
     HttpClientModule,
+=======
+    HomeComponent,
+>>>>>>> Stashed changes
   ],
+
   providers: [],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {

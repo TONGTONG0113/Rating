@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core"
 import { RouterModule, Routes } from "@angular/router"
+<<<<<<< Updated upstream
 import { HomeComponent } from "home/home.component"
 import { StudentsComponent } from "students/students.component"
 import { StudentsResolver } from "students/students.resolver"
@@ -9,6 +10,13 @@ import { MajorsComponent } from "majors/majors.component"
 import { MajorsResolver } from "majors/majors.resolver"
 import { MajorStudentsResolver } from "majors/major-students/major-students.resolver"
 import { MajorStudentsComponent } from "majors/major-students/major-students.component"
+=======
+
+import { HomeComponent } from "./home/home.component"
+import { UsersComponent } from "./users/users.component"
+import {RestaurantComponent} from "./restaurant/restaurant.component"
+import { RestaurantDetailComponent } from "./restaurant-detail/restaurant-detail.component"
+>>>>>>> Stashed changes
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -39,6 +47,14 @@ const routes: Routes = [
     resolve: {
       studentsFromMajor: MajorStudentsResolver,
     },
+  },
+  {
+    path: "restaurants",
+    component: RestaurantComponent,
+  },
+  {
+    path: "restaurants/:id",
+    component: RestaurantDetailComponent,
   },
 ]
 

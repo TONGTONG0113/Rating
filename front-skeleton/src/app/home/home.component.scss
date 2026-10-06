@@ -7,19 +7,22 @@
 /* HERO */
 
 .hero {
-  min-height: 620px;
+  min-height: 600px;
+
+  background:
+    linear-gradient(
+      rgba(10, 18, 30, 0.68),
+      rgba(10, 18, 30, 0.78)
+    ),
+    url("/assets/restaurant-food.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background:
-    linear-gradient(
-      rgba(15, 23, 42, 0.92),
-      rgba(15, 23, 42, 0.92)
-    );
-
-  padding: 60px 24px;
 }
 
 

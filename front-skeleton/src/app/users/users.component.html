@@ -1,7 +1,6 @@
 <div class="page">
 
   <section class="page-header">
-
     <div>
       <p class="eyebrow">
         ADMINISTRATION
@@ -10,10 +9,9 @@
       <h1>User Management</h1>
 
       <p class="subtitle">
-        Manage users registered on the Rating platform.
+        Manage users and review their activity on the Rating platform.
       </p>
     </div>
-
   </section>
 
 
@@ -31,6 +29,7 @@
       </span>
     </div>
 
+
     <div class="stat-card">
       <span class="stat-number">
         {{ activeUsersCount }}
@@ -41,6 +40,7 @@
       </span>
     </div>
 
+
     <div class="stat-card">
       <span class="stat-number">
         {{ disabledUsersCount }}
@@ -50,6 +50,7 @@
         Disabled
       </span>
     </div>
+
 
     <div class="stat-card">
       <span class="stat-number">
@@ -81,7 +82,7 @@
   </div>
 
 
-  <!-- FORM -->
+  <!-- CREATE / EDIT -->
 
   <section class="panel">
 
@@ -99,8 +100,8 @@
         <p>
           {{
             editingUserId !== undefined
-              ? "Update the selected user."
-              : "Create a new user."
+              ? "Update the selected user's information."
+              : "Create a new user account."
           }}
         </p>
       </div>
@@ -125,6 +126,7 @@
           type="text"
           [(ngModel)]="formUser.name"
           placeholder="John Smith"
+          required
         >
 
       </div>
@@ -142,6 +144,7 @@
           type="email"
           [(ngModel)]="formUser.email"
           placeholder="john@example.com"
+          required
         >
 
       </div>
@@ -159,6 +162,7 @@
               : "Create user"
           }}
         </button>
+
 
         <button
           *ngIf="editingUserId !== undefined"
@@ -197,6 +201,7 @@
         </p>
       </div>
 
+
       <div class="header-actions">
 
         <button
@@ -206,6 +211,7 @@
         >
           Refresh
         </button>
+
 
         <button
           type="button"
@@ -237,6 +243,7 @@
         [(ngModel)]="statusFilter"
         (ngModelChange)="onFiltersChanged()"
       >
+
         <option value="all">
           All statuses
         </option>
@@ -248,6 +255,7 @@
         <option value="disabled">
           Disabled
         </option>
+
       </select>
 
 
@@ -255,12 +263,14 @@
         [(ngModel)]="pageSize"
         (ngModelChange)="changePageSize()"
       >
+
         <option
           *ngFor="let size of pageSizes"
           [ngValue]="size"
         >
           {{ size }} per page
         </option>
+
       </select>
 
     </div>
@@ -273,8 +283,6 @@
       Loading users...
     </div>
 
-
-    <!-- NO RESULTS -->
 
     <div
       *ngIf="
@@ -303,8 +311,6 @@
     </div>
 
 
-    <!-- TABLE -->
-
     <div
       *ngIf="
         !loading &&
@@ -316,11 +322,9 @@
       <table>
 
         <thead>
-
         <tr>
 
           <th>
-
             <button
               class="sort-button"
               type="button"
@@ -329,23 +333,15 @@
               User
 
               <span
-                *ngIf="
-                    sortField === 'name'
-                  "
+                *ngIf="sortField === 'name'"
               >
-                  {{
-                  sortAscending
-                    ? "↑"
-                    : "↓"
-                }}
-                </span>
+                {{ sortAscending ? "↑" : "↓" }}
+              </span>
             </button>
-
           </th>
 
 
           <th>
-
             <button
               class="sort-button"
               type="button"
@@ -354,18 +350,11 @@
               Email
 
               <span
-                *ngIf="
-                    sortField === 'email'
-                  "
+                *ngIf="sortField === 'email'"
               >
-                  {{
-                  sortAscending
-                    ? "↑"
-                    : "↓"
-                }}
-                </span>
+                {{ sortAscending ? "↑" : "↓" }}
+              </span>
             </button>
-
           </th>
 
 
@@ -375,7 +364,6 @@
 
 
           <th>
-
             <button
               class="sort-button"
               type="button"
@@ -384,23 +372,15 @@
               Registered
 
               <span
-                *ngIf="
-                    sortField === 'createdAt'
-                  "
+                *ngIf="sortField === 'createdAt'"
               >
-                  {{
-                  sortAscending
-                    ? "↑"
-                    : "↓"
-                }}
-                </span>
+                {{ sortAscending ? "↑" : "↓" }}
+              </span>
             </button>
-
           </th>
 
 
           <th>
-
             <button
               class="sort-button"
               type="button"
@@ -409,18 +389,11 @@
               ID
 
               <span
-                *ngIf="
-                    sortField === 'id'
-                  "
+                *ngIf="sortField === 'id'"
               >
-                  {{
-                  sortAscending
-                    ? "↑"
-                    : "↓"
-                }}
-                </span>
+                {{ sortAscending ? "↑" : "↓" }}
+              </span>
             </button>
-
           </th>
 
 
@@ -429,19 +402,16 @@
           </th>
 
         </tr>
-
         </thead>
 
 
         <tbody>
 
         <tr
-          *ngFor="
-              let user of paginatedUsers
-            "
+          *ngFor="let user of paginatedUsers"
           [class.disabled-row]="
-              user.active === false
-            "
+            user.active === false
+          "
         >
 
           <td>
@@ -469,9 +439,9 @@
 
             <div class="copy-value">
 
-                <span>
-                  {{ user.email }}
-                </span>
+              <span>
+                {{ user.email }}
+              </span>
 
               <button
                 type="button"
@@ -488,21 +458,21 @@
 
           <td>
 
-              <span
-                class="status"
-                [class.active-status]="
-                  user.active !== false
-                "
-                [class.disabled-status]="
-                  user.active === false
-                "
-              >
-                {{
-                  user.active !== false
-                    ? "Active"
-                    : "Disabled"
-                }}
-              </span>
+            <span
+              class="status"
+              [class.active-status]="
+                user.active !== false
+              "
+              [class.disabled-status]="
+                user.active === false
+              "
+            >
+              {{
+                user.active !== false
+                  ? "Active"
+                  : "Disabled"
+              }}
+            </span>
 
           </td>
 
@@ -519,9 +489,9 @@
 
             <div class="copy-value">
 
-                <span>
-                  #{{ user.id }}
-                </span>
+              <span>
+                #{{ user.id }}
+              </span>
 
               <button
                 type="button"
@@ -546,6 +516,7 @@
               View
             </button>
 
+
             <button
               type="button"
               class="edit-button"
@@ -553,6 +524,7 @@
             >
               Edit
             </button>
+
 
             <button
               type="button"
@@ -565,6 +537,7 @@
                   : "Enable"
               }}
             </button>
+
 
             <button
               type="button"
@@ -588,9 +561,7 @@
     <!-- PAGINATION -->
 
     <div
-      *ngIf="
-        filteredUsers.length > 0
-      "
+      *ngIf="filteredUsers.length > 0"
       class="pagination"
     >
 
@@ -630,7 +601,7 @@
 </div>
 
 
-<!-- DETAILS DRAWER -->
+<!-- USER DETAILS + REVIEWS DRAWER -->
 
 <div
   *ngIf="selectedUser"
@@ -727,6 +698,7 @@
         Copy ID
       </button>
 
+
       <button
         type="button"
         class="secondary-button"
@@ -736,6 +708,144 @@
       </button>
 
     </div>
+
+
+    <!-- USER REVIEWS -->
+
+    <section class="reviews-section">
+
+      <div class="reviews-header">
+
+        <div>
+          <h3>
+            Reviews
+          </h3>
+
+          <p>
+            Reviews published by
+            {{ selectedUser.name }}
+          </p>
+        </div>
+
+
+        <span class="review-count">
+          {{ selectedUserReviews.length }}
+        </span>
+
+      </div>
+
+
+      <div
+        *ngIf="reviewsLoading"
+        class="reviews-loading"
+      >
+        Loading reviews...
+      </div>
+
+
+      <div
+        *ngIf="reviewErrorMessage"
+        class="review-error"
+      >
+        {{ reviewErrorMessage }}
+      </div>
+
+
+      <div
+        *ngIf="
+          !reviewsLoading &&
+          !reviewErrorMessage &&
+          selectedUserReviews.length === 0
+        "
+        class="reviews-empty"
+      >
+        This user has not published any reviews.
+      </div>
+
+
+      <article
+        *ngFor="
+          let review of selectedUserReviews
+        "
+        class="review-card"
+      >
+
+        <div class="review-card-header">
+
+          <div>
+
+            <strong class="restaurant-name">
+              {{
+                review.restaurantTitle
+                || ("Restaurant #" + review.restaurantId)
+              }}
+            </strong>
+
+            <div class="stars">
+
+              <span
+                *ngFor="
+                  let star of [1, 2, 3, 4, 5]
+                "
+                [class.star-filled]="
+                  star <= review.rating
+                "
+              >
+                ★
+              </span>
+
+              <span class="rating-number">
+                {{ review.rating }}/5
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <button
+            *ngIf="review.id !== undefined"
+            type="button"
+            class="review-delete-button"
+            (click)="deleteReview(review)"
+          >
+            Delete
+          </button>
+
+        </div>
+
+
+        <h4>
+          {{ review.summary }}
+        </h4>
+
+
+        <p
+          *ngIf="review.details"
+          class="review-details"
+        >
+          {{ review.details }}
+        </p>
+
+
+        <div class="review-meta">
+
+          <span>
+            Review #{{ review.id }}
+          </span>
+
+          <span>
+            {{
+              review.createdAt
+                | date:"dd/MM/yyyy HH:mm"
+            }}
+          </span>
+
+        </div>
+
+      </article>
+
+    </section>
 
   </aside>
 

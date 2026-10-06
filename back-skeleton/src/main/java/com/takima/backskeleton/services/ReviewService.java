@@ -8,7 +8,9 @@ import com.takima.backskeleton.DTO.ReviewMapper;
 import com.takima.backskeleton.models.AppUser;
 import com.takima.backskeleton.models.Restaurant;
 import com.takima.backskeleton.models.Review;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,34 +33,44 @@ public class ReviewService {
     }
 
     public List<ReviewDto> getAllReviews() {
-        return reviewDao.findAll()
+
+        return reviewDao
+                .findAll()
                 .stream()
                 .map(ReviewMapper::toDto)
                 .toList();
     }
 
     public ReviewDto getReviewById(Long id) {
-        Review review = reviewDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
 
-        return ReviewMapper.toDto(review);
+        return ReviewMapper.toDto(
+                getReviewOrThrow(id)
+        );
     }
 
     public ReviewDto createReview(ReviewDto dto) {
 
-        if (dto.getRating() == null ||
-                dto.getRating() < 1 ||
-                dto.getRating() > 5) {
-            throw new IllegalArgumentException(
-                    "Rating must be between 1 and 5"
-            );
-        }
+        validateReview(dto);
 
-        AppUser user = appUserDao.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        AppUser user = appUserDao
+                .findById(dto.getUserId())
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                        HttpStatus.NOT_FOUND,
+                                        "User not found"
+                                )
+                );
 
-        Restaurant restaurant = restaurantDao.findById(dto.getRestaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        Restaurant restaurant = restaurantDao
+                .findById(dto.getRestaurantId())
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                        HttpStatus.NOT_FOUND,
+                                        "Restaurant not found"
+                                )
+                );
 
         Review review = ReviewMapper.fromDto(
                 dto,
@@ -67,63 +79,157 @@ public class ReviewService {
                 restaurant
         );
 
-        review.setCreatedAt(LocalDateTime.now());
+        review.setCreatedAt(
+                LocalDateTime.now()
+        );
 
-        Review savedReview = reviewDao.save(review);
+        Review savedReview =
+                reviewDao.save(review);
 
-        return ReviewMapper.toDto(savedReview);
+        return ReviewMapper.toDto(
+                savedReview
+        );
     }
 
-    public ReviewDto updateReview(Long id, ReviewDto dto) {
+    public ReviewDto updateReview(
+            Long id,
+            ReviewDto dto
+    ) {
 
-        Review existingReview = reviewDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+        Review existingReview =
+                getReviewOrThrow(id);
 
-        if (dto.getRating() == null ||
-                dto.getRating() < 1 ||
-                dto.getRating() > 5) {
-            throw new IllegalArgumentException(
-                    "Rating must be between 1 and 5"
-            );
-        }
+        validateReviewContent(dto);
 
-        existingReview.setRating(dto.getRating());
-        existingReview.setSummary(dto.getSummary());
-        existingReview.setDetails(dto.getDetails());
+        existingReview.setRating(
+                dto.getRating()
+        );
 
-        Review updatedReview = reviewDao.save(existingReview);
+        existingReview.setSummary(
+                dto.getSummary()
+        );
 
-        return ReviewMapper.toDto(updatedReview);
+        existingReview.setDetails(
+                dto.getDetails()
+        );
+
+        Review updatedReview =
+                reviewDao.save(
+                        existingReview
+                );
+
+        return ReviewMapper.toDto(
+                updatedReview
+        );
     }
 
     public void deleteReview(Long id) {
 
-        if (!reviewDao.existsById(id)) {
-            throw new RuntimeException("Review not found");
+        Review review =
+                getReviewOrThrow(id);
+
+        reviewDao.delete(review);
+    }
+
+    public List<ReviewDto> getReviewsByRestaurant(
+            Long restaurantId
+    ) {
+
+        if (!restaurantDao.existsById(restaurantId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Restaurant not found"
+            );
         }
 
-        reviewDao.deleteById(id);
-    }
-
-    public List<ReviewDto> getReviewsByRestaurant(Long restaurantId) {
-
-        return reviewDao.findAll()
-                .stream()
-                .filter(review ->
-                        review.getRestaurant().getId().equals(restaurantId)
+        return reviewDao
+                .findByRestaurantIdOrderByCreatedAtDesc(
+                        restaurantId
                 )
+                .stream()
                 .map(ReviewMapper::toDto)
                 .toList();
     }
 
-    public List<ReviewDto> getReviewsByUser(Long userId) {
+    public List<ReviewDto> getReviewsByUser(
+            Long userId
+    ) {
 
-        return reviewDao.findAll()
-                .stream()
-                .filter(review ->
-                        review.getUser().getId().equals(userId)
+        if (!appUserDao.existsById(userId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "User not found"
+            );
+        }
+
+        return reviewDao
+                .findByUserIdOrderByCreatedAtDesc(
+                        userId
                 )
+                .stream()
                 .map(ReviewMapper::toDto)
                 .toList();
+    }
+
+    private Review getReviewOrThrow(
+            Long id
+    ) {
+
+        return reviewDao
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                        HttpStatus.NOT_FOUND,
+                                        "Review not found"
+                                )
+                );
+    }
+
+    private void validateReview(
+            ReviewDto dto
+    ) {
+
+        validateReviewContent(dto);
+
+        if (dto.getUserId() == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "User is required"
+            );
+        }
+
+        if (dto.getRestaurantId() == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Restaurant is required"
+            );
+        }
+    }
+
+    private void validateReviewContent(
+            ReviewDto dto
+    ) {
+
+        if (
+                dto.getRating() == null ||
+                        dto.getRating() < 1 ||
+                        dto.getRating() > 5
+        ) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Rating must be between 1 and 5"
+            );
+        }
+
+        if (
+                dto.getSummary() == null ||
+                        dto.getSummary().isBlank()
+        ) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Summary is required"
+            );
+        }
     }
 }

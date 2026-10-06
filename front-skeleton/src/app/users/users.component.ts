@@ -3,7 +3,10 @@ import { Component, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 
 import { User } from "../models/user.model"
+import { Review } from "../models/review.model"
+
 import { UserService } from "../services/user.service"
+import { ReviewService } from "../services/review.service"
 
 type SortField = "id" | "name" | "email" | "createdAt"
 
@@ -28,6 +31,12 @@ export class UsersComponent implements OnInit {
 
   selectedUser?: User
 
+  selectedUserReviews: Review[] = []
+
+  reviewsLoading = false
+
+  reviewErrorMessage = ""
+
   searchTerm = ""
 
   statusFilter: StatusFilter = "all"
@@ -48,7 +57,7 @@ export class UsersComponent implements OnInit {
 
   successMessage = ""
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private reviewService: ReviewService) {}
 
   ngOnInit(): void {
     this.loadUsers()
@@ -135,6 +144,10 @@ export class UsersComponent implements OnInit {
     this.clearMessages()
 
     this.loadUsers()
+
+    if (this.selectedUser?.id !== undefined) {
+      this.loadUserReviews(this.selectedUser.id)
+    }
   }
 
   resetFilters(): void {
@@ -212,12 +225,6 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page
-    }
-  }
-
   saveUser(): void {
     this.clearMessages()
 
@@ -247,6 +254,8 @@ export class UsersComponent implements OnInit {
       error: (error) => {
         if (error.status === 409) {
           this.errorMessage = "This email is already used."
+        } else if (error.status === 400) {
+          this.errorMessage = "Invalid user information."
         } else {
           this.errorMessage = "Unable to create user."
         }
@@ -291,6 +300,8 @@ export class UsersComponent implements OnInit {
       error: (error) => {
         if (error.status === 409) {
           this.errorMessage = "This email is already used."
+        } else if (error.status === 404) {
+          this.errorMessage = "User not found."
         } else {
           this.errorMessage = "Unable to update user."
         }
@@ -333,7 +344,7 @@ export class UsersComponent implements OnInit {
       return
     }
 
-    const confirmed = confirm(`Are you sure you want to delete ${user.name}?`)
+    const confirmed = confirm(`Delete ${user.name}? Their reviews will also be deleted.`)
 
     if (!confirmed) {
       return
@@ -364,10 +375,66 @@ export class UsersComponent implements OnInit {
 
   viewUser(user: User): void {
     this.selectedUser = user
+
+    this.selectedUserReviews = []
+
+    this.reviewErrorMessage = ""
+
+    if (user.id !== undefined) {
+      this.loadUserReviews(user.id)
+    }
+  }
+
+  loadUserReviews(userId: number): void {
+    this.reviewsLoading = true
+
+    this.reviewErrorMessage = ""
+
+    this.reviewService.getByUser(userId).subscribe({
+      next: (reviews) => {
+        this.selectedUserReviews = reviews
+
+        this.reviewsLoading = false
+      },
+
+      error: () => {
+        this.reviewErrorMessage = "Unable to load this user's reviews."
+
+        this.reviewsLoading = false
+      },
+    })
+  }
+
+  deleteReview(review: Review): void {
+    if (review.id === undefined) {
+      return
+    }
+
+    const confirmed = confirm(`Delete this review for ${review.restaurantTitle ?? "this restaurant"}?`)
+
+    if (!confirmed) {
+      return
+    }
+
+    this.reviewService.delete(review.id).subscribe({
+      next: () => {
+        this.successMessage = "Review deleted successfully."
+
+        this.selectedUserReviews = this.selectedUserReviews.filter((item) => item.id !== review.id)
+      },
+
+      error: () => {
+        this.reviewErrorMessage = "Unable to delete review."
+      },
+    })
   }
 
   closeDetails(): void {
     this.selectedUser = undefined
+
+    this.selectedUserReviews = []
+
+    this.reviewErrorMessage = ""
   }
 
   copyId(user: User): void {

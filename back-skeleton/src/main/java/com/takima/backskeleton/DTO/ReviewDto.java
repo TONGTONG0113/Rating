@@ -9,8 +9,12 @@ public class ReviewDto {
     private String summary;
     private String details;
     private LocalDateTime createdAt;
+
     private Long userId;
+    private String userName;
+
     private Long restaurantId;
+    private String restaurantTitle;
 
     public Long getId() {
         return id;
@@ -36,8 +40,16 @@ public class ReviewDto {
         return userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
     public Long getRestaurantId() {
         return restaurantId;
+    }
+
+    public String getRestaurantTitle() {
+        return restaurantTitle;
     }
 
     public static final class ReviewDtoBuilder {
@@ -47,8 +59,12 @@ public class ReviewDto {
         private String summary;
         private String details;
         private LocalDateTime createdAt;
+
         private Long userId;
+        private String userName;
+
         private Long restaurantId;
+        private String restaurantTitle;
 
         public ReviewDtoBuilder() {
         }
@@ -87,23 +103,37 @@ public class ReviewDto {
             return this;
         }
 
+        public ReviewDtoBuilder userName(String userName) {
+            this.userName = userName;
+            return this;
+        }
+
         public ReviewDtoBuilder restaurantId(Long restaurantId) {
             this.restaurantId = restaurantId;
             return this;
         }
 
+        public ReviewDtoBuilder restaurantTitle(String restaurantTitle) {
+            this.restaurantTitle = restaurantTitle;
+            return this;
+        }
+
         public ReviewDto build() {
-            ReviewDto reviewDto = new ReviewDto();
+            ReviewDto dto = new ReviewDto();
 
-            reviewDto.id = this.id;
-            reviewDto.rating = this.rating;
-            reviewDto.summary = this.summary;
-            reviewDto.details = this.details;
-            reviewDto.createdAt = this.createdAt;
-            reviewDto.userId = this.userId;
-            reviewDto.restaurantId = this.restaurantId;
+            dto.id = this.id;
+            dto.rating = this.rating;
+            dto.summary = this.summary;
+            dto.details = this.details;
+            dto.createdAt = this.createdAt;
 
-            return reviewDto;
+            dto.userId = this.userId;
+            dto.userName = this.userName;
+
+            dto.restaurantId = this.restaurantId;
+            dto.restaurantTitle = this.restaurantTitle;
+
+            return dto;
         }
     }
 }

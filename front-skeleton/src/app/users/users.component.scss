@@ -1,14 +1,12 @@
 :host {
   display: block;
   min-height: calc(100vh - 72px);
-
   background: #f7f8fa;
   color: #111827;
 }
 
 .page {
   max-width: 1280px;
-
   margin: 0 auto;
   padding: 48px 24px 80px;
 }
@@ -19,24 +17,19 @@
 
 .eyebrow {
   margin: 0 0 8px;
-
   color: #7c3aed;
-
   font-size: 12px;
   font-weight: 700;
-
   letter-spacing: 1.5px;
 }
 
 .page-header h1 {
   margin: 0;
-
   font-size: 36px;
 }
 
 .subtitle {
   margin-top: 10px;
-
   color: #6b7280;
 }
 
@@ -45,26 +38,19 @@
 
 .stats-grid {
   display: grid;
-
   grid-template-columns:
     repeat(4, 1fr);
-
   gap: 16px;
-
   margin-bottom: 24px;
 }
 
 .stat-card {
   padding: 22px;
-
   display: flex;
   flex-direction: column;
-
   border: 1px solid #e5e7eb;
   border-radius: 14px;
-
   background: white;
-
   box-shadow:
     0 6px 20px
     rgba(0, 0, 0, 0.04);
@@ -77,33 +63,28 @@
 
 .stat-label {
   margin-top: 5px;
-
   color: #6b7280;
   font-size: 13px;
 }
 
 
-/* MESSAGE */
+/* MESSAGES */
 
 .message {
   margin-bottom: 20px;
   padding: 14px 18px;
-
   border-radius: 9px;
-
   font-weight: 500;
 }
 
 .success {
   border: 1px solid #a7f3d0;
-
   background: #ecfdf5;
   color: #047857;
 }
 
 .error {
   border: 1px solid #fecaca;
-
   background: #fef2f2;
   color: #b91c1c;
 }
@@ -114,12 +95,9 @@
 .panel {
   margin-bottom: 24px;
   padding: 28px;
-
   border: 1px solid #e5e7eb;
   border-radius: 16px;
-
   background: white;
-
   box-shadow:
     0 8px 28px
     rgba(0, 0, 0, 0.04);
@@ -127,11 +105,9 @@
 
 .panel-header {
   margin-bottom: 22px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 20px;
 }
 
@@ -141,9 +117,7 @@
 
 .panel-header p {
   margin: 6px 0 0;
-
   color: #6b7280;
-
   font-size: 14px;
 }
 
@@ -157,14 +131,11 @@
 
 .user-form {
   display: grid;
-
   grid-template-columns:
     1fr
     1fr
     auto;
-
   align-items: end;
-
   gap: 16px;
 }
 
@@ -175,9 +146,7 @@
 
 .form-group label {
   margin-bottom: 7px;
-
   color: #374151;
-
   font-size: 13px;
   font-weight: 600;
 }
@@ -186,18 +155,12 @@
 .filters input,
 .filters select {
   height: 44px;
-
   box-sizing: border-box;
-
   padding: 0 13px;
-
   border: 1px solid #d1d5db;
   border-radius: 8px;
-
   outline: none;
-
   background: white;
-
   font-size: 14px;
 }
 
@@ -205,7 +168,6 @@
 .filters input:focus,
 .filters select:focus {
   border-color: #7c3aed;
-
   box-shadow:
     0 0 0 3px
     rgba(124, 58, 237, 0.1);
@@ -221,14 +183,11 @@
 
 .filters {
   margin-bottom: 22px;
-
   display: grid;
-
   grid-template-columns:
     minmax(260px, 1fr)
     180px
     150px;
-
   gap: 10px;
 }
 
@@ -238,11 +197,8 @@
 button {
   border: none;
   border-radius: 7px;
-
   cursor: pointer;
-
   font-weight: 600;
-
   transition: 0.15s;
 }
 
@@ -253,18 +209,14 @@ button:disabled {
 
 .primary-button {
   min-height: 44px;
-
   padding: 0 18px;
-
   background: #111827;
   color: white;
 }
 
 .secondary-button {
   min-height: 38px;
-
   padding: 0 14px;
-
   background: #f3f4f6;
   color: #374151;
 }
@@ -282,33 +234,24 @@ button:disabled {
 
 table {
   width: 100%;
-
   border-collapse: collapse;
 }
 
 th {
   padding: 12px;
-
   border-bottom:
     1px solid #e5e7eb;
-
   text-align: left;
-
   color: #6b7280;
-
   font-size: 12px;
 }
 
 td {
   padding: 15px 12px;
-
   border-bottom:
     1px solid #f0f1f3;
-
   color: #374151;
-
   font-size: 14px;
-
   white-space: nowrap;
 }
 
@@ -318,14 +261,12 @@ tbody tr:hover {
 
 .disabled-row {
   opacity: 0.55;
-
   background: #fafafa;
 }
 
 .user-name {
   display: flex;
   align-items: center;
-
   gap: 10px;
 }
 
@@ -334,18 +275,14 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
   background:
     linear-gradient(
         135deg,
         #ede9fe,
         #fee2e2
     );
-
   color: #5b21b6;
-
   font-weight: 700;
 }
 
@@ -356,16 +293,11 @@ tbody tr:hover {
 
 .sort-button {
   padding: 0;
-
   border: none;
-
   background: transparent;
   color: #6b7280;
-
   font-size: 12px;
   font-weight: 700;
-
-  cursor: pointer;
 }
 
 .sort-button:hover {
@@ -377,11 +309,8 @@ tbody tr:hover {
 
 .status {
   display: inline-block;
-
   padding: 5px 9px;
-
   border-radius: 100px;
-
   font-size: 12px;
   font-weight: 700;
 }
@@ -397,7 +326,7 @@ tbody tr:hover {
 }
 
 
-/* ACTIONS */
+/* TABLE ACTIONS */
 
 .actions-column {
   text-align: right;
@@ -437,18 +366,14 @@ tbody tr:hover {
 
 .small-button {
   padding: 4px 7px;
-
   background: #f3f4f6;
-
   color: #4b5563;
-
   font-size: 11px;
 }
 
 .copy-value {
   display: flex;
   align-items: center;
-
   gap: 7px;
 }
 
@@ -457,33 +382,26 @@ tbody tr:hover {
 
 .pagination {
   margin-top: 22px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 16px;
-
   color: #6b7280;
-
   font-size: 14px;
 }
 
 
-/* LOADING / EMPTY */
+/* LOADING */
 
 .loading,
 .empty-state {
   padding: 45px 20px;
-
   text-align: center;
-
   color: #6b7280;
 }
 
 .empty-state h3 {
   margin-bottom: 8px;
-
   color: #111827;
 }
 
@@ -492,29 +410,22 @@ tbody tr:hover {
 
 .drawer-backdrop {
   position: fixed;
-
   inset: 0;
-
   z-index: 1000;
-
   display: flex;
   justify-content: flex-end;
-
   background:
     rgba(17, 24, 39, 0.35);
 }
 
 .drawer {
-  width: 400px;
-  max-width: 90vw;
+  width: 520px;
+  max-width: 94vw;
   height: 100%;
-
   box-sizing: border-box;
-
   padding: 28px;
-
+  overflow-y: auto;
   background: white;
-
   box-shadow:
     -10px 0 30px
     rgba(0, 0, 0, 0.12);
@@ -533,38 +444,29 @@ tbody tr:hover {
 .close-button {
   width: 36px;
   height: 36px;
-
   background: #f3f4f6;
-
   font-size: 24px;
 }
 
 .drawer-avatar {
   width: 72px;
   height: 72px;
-
   margin: 35px auto 15px;
-
   font-size: 28px;
 }
 
 .drawer > h3 {
   margin-bottom: 30px;
-
   text-align: center;
-
   font-size: 22px;
 }
 
 .detail-row {
   padding: 15px 0;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 20px;
-
   border-bottom:
     1px solid #f0f1f3;
 }
@@ -574,18 +476,139 @@ tbody tr:hover {
 }
 
 .detail-row strong {
-  max-width: 230px;
-
+  max-width: 300px;
   overflow-wrap: anywhere;
-
   text-align: right;
 }
 
 .drawer-actions {
-  margin-top: 30px;
-
+  margin-top: 24px;
   display: flex;
   gap: 10px;
+}
+
+
+/* REVIEWS */
+
+.reviews-section {
+  margin-top: 32px;
+  padding-top: 26px;
+  border-top:
+    1px solid #e5e7eb;
+}
+
+.reviews-header {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reviews-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.reviews-header p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.review-count {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.reviews-loading,
+.reviews-empty,
+.review-error {
+  padding: 22px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.reviews-loading,
+.reviews-empty {
+  background: #f9fafb;
+  color: #6b7280;
+}
+
+.review-error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.review-card {
+  margin-bottom: 14px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.restaurant-name {
+  display: block;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.stars {
+  color: #d1d5db;
+}
+
+.star-filled {
+  color: #f59e0b;
+}
+
+.rating-number {
+  margin-left: 8px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.review-card h4 {
+  margin: 14px 0 8px;
+  font-size: 15px;
+}
+
+.review-details {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.55;
+  white-space: normal;
+}
+
+.review-meta {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #9ca3af;
+  font-size: 11px;
+}
+
+.review-delete-button {
+  height: 32px;
+  padding: 0 10px;
+  background: #fef2f2;
+  color: #dc2626;
 }
 
 
@@ -625,6 +648,19 @@ tbody tr:hover {
   }
 
   .header-actions {
+    width: 100%;
+  }
+
+  .drawer {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .review-card-header {
+    flex-direction: column;
+  }
+
+  .review-delete-button {
     width: 100%;
   }
 }

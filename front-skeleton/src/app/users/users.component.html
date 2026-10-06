@@ -1,0 +1,742 @@
+<div class="page">
+
+  <section class="page-header">
+
+    <div>
+      <p class="eyebrow">
+        ADMINISTRATION
+      </p>
+
+      <h1>User Management</h1>
+
+      <p class="subtitle">
+        Manage users registered on the Rating platform.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- STATISTICS -->
+
+  <section class="stats-grid">
+
+    <div class="stat-card">
+      <span class="stat-number">
+        {{ users.length }}
+      </span>
+
+      <span class="stat-label">
+        Total users
+      </span>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-number">
+        {{ activeUsersCount }}
+      </span>
+
+      <span class="stat-label">
+        Active
+      </span>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-number">
+        {{ disabledUsersCount }}
+      </span>
+
+      <span class="stat-label">
+        Disabled
+      </span>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-number">
+        {{ filteredUsers.length }}
+      </span>
+
+      <span class="stat-label">
+        Filtered
+      </span>
+    </div>
+
+  </section>
+
+
+  <!-- MESSAGES -->
+
+  <div
+    *ngIf="successMessage"
+    class="message success"
+  >
+    {{ successMessage }}
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="message error"
+  >
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- FORM -->
+
+  <section class="panel">
+
+    <div class="panel-header">
+
+      <div>
+        <h2>
+          {{
+            editingUserId !== undefined
+              ? "Edit user"
+              : "Add user"
+          }}
+        </h2>
+
+        <p>
+          {{
+            editingUserId !== undefined
+              ? "Update the selected user."
+              : "Create a new user."
+          }}
+        </p>
+      </div>
+
+    </div>
+
+
+    <form
+      class="user-form"
+      (ngSubmit)="saveUser()"
+    >
+
+      <div class="form-group">
+
+        <label for="name">
+          Name
+        </label>
+
+        <input
+          id="name"
+          name="name"
+          type="text"
+          [(ngModel)]="formUser.name"
+          placeholder="John Smith"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          id="email"
+          name="email"
+          type="email"
+          [(ngModel)]="formUser.email"
+          placeholder="john@example.com"
+        >
+
+      </div>
+
+
+      <div class="form-actions">
+
+        <button
+          type="submit"
+          class="primary-button"
+        >
+          {{
+            editingUserId !== undefined
+              ? "Save changes"
+              : "Create user"
+          }}
+        </button>
+
+        <button
+          *ngIf="editingUserId !== undefined"
+          type="button"
+          class="secondary-button"
+          (click)="cancelEdit()"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- USERS -->
+
+  <section class="panel users-panel">
+
+    <div class="panel-header">
+
+      <div>
+        <h2>
+          Users
+        </h2>
+
+        <p>
+          Showing
+          {{ rangeStart }}
+          -
+          {{ rangeEnd }}
+          of
+          {{ filteredUsers.length }}
+        </p>
+      </div>
+
+      <div class="header-actions">
+
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="refreshUsers()"
+        >
+          Refresh
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="resetFilters()"
+        >
+          Reset filters
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- FILTERS -->
+
+    <div class="filters">
+
+      <input
+        class="search-input"
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onFiltersChanged()"
+        placeholder="Search by ID, name or email..."
+      >
+
+
+      <select
+        [(ngModel)]="statusFilter"
+        (ngModelChange)="onFiltersChanged()"
+      >
+        <option value="all">
+          All statuses
+        </option>
+
+        <option value="active">
+          Active
+        </option>
+
+        <option value="disabled">
+          Disabled
+        </option>
+      </select>
+
+
+      <select
+        [(ngModel)]="pageSize"
+        (ngModelChange)="changePageSize()"
+      >
+        <option
+          *ngFor="let size of pageSizes"
+          [ngValue]="size"
+        >
+          {{ size }} per page
+        </option>
+      </select>
+
+    </div>
+
+
+    <div
+      *ngIf="loading"
+      class="loading"
+    >
+      Loading users...
+    </div>
+
+
+    <!-- NO RESULTS -->
+
+    <div
+      *ngIf="
+        !loading &&
+        filteredUsers.length === 0
+      "
+      class="empty-state"
+    >
+
+      <h3>
+        No users found
+      </h3>
+
+      <p>
+        No users match the current search or filters.
+      </p>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="resetFilters()"
+      >
+        Reset filters
+      </button>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div
+      *ngIf="
+        !loading &&
+        filteredUsers.length > 0
+      "
+      class="table-wrapper"
+    >
+
+      <table>
+
+        <thead>
+
+        <tr>
+
+          <th>
+
+            <button
+              class="sort-button"
+              type="button"
+              (click)="toggleSort('name')"
+            >
+              User
+
+              <span
+                *ngIf="
+                    sortField === 'name'
+                  "
+              >
+                  {{
+                  sortAscending
+                    ? "↑"
+                    : "↓"
+                }}
+                </span>
+            </button>
+
+          </th>
+
+
+          <th>
+
+            <button
+              class="sort-button"
+              type="button"
+              (click)="toggleSort('email')"
+            >
+              Email
+
+              <span
+                *ngIf="
+                    sortField === 'email'
+                  "
+              >
+                  {{
+                  sortAscending
+                    ? "↑"
+                    : "↓"
+                }}
+                </span>
+            </button>
+
+          </th>
+
+
+          <th>
+            Status
+          </th>
+
+
+          <th>
+
+            <button
+              class="sort-button"
+              type="button"
+              (click)="toggleSort('createdAt')"
+            >
+              Registered
+
+              <span
+                *ngIf="
+                    sortField === 'createdAt'
+                  "
+              >
+                  {{
+                  sortAscending
+                    ? "↑"
+                    : "↓"
+                }}
+                </span>
+            </button>
+
+          </th>
+
+
+          <th>
+
+            <button
+              class="sort-button"
+              type="button"
+              (click)="toggleSort('id')"
+            >
+              ID
+
+              <span
+                *ngIf="
+                    sortField === 'id'
+                  "
+              >
+                  {{
+                  sortAscending
+                    ? "↑"
+                    : "↓"
+                }}
+                </span>
+            </button>
+
+          </th>
+
+
+          <th class="actions-column">
+            Actions
+          </th>
+
+        </tr>
+
+        </thead>
+
+
+        <tbody>
+
+        <tr
+          *ngFor="
+              let user of paginatedUsers
+            "
+          [class.disabled-row]="
+              user.active === false
+            "
+        >
+
+          <td>
+
+            <div class="user-name">
+
+              <div class="avatar">
+                {{
+                  user.name
+                    .charAt(0)
+                    .toUpperCase()
+                }}
+              </div>
+
+              <strong>
+                {{ user.name }}
+              </strong>
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <div class="copy-value">
+
+                <span>
+                  {{ user.email }}
+                </span>
+
+              <button
+                type="button"
+                class="small-button"
+                (click)="copyEmail(user)"
+              >
+                Copy
+              </button>
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+              <span
+                class="status"
+                [class.active-status]="
+                  user.active !== false
+                "
+                [class.disabled-status]="
+                  user.active === false
+                "
+              >
+                {{
+                  user.active !== false
+                    ? "Active"
+                    : "Disabled"
+                }}
+              </span>
+
+          </td>
+
+
+          <td>
+            {{
+              user.createdAt
+                | date:"dd/MM/yyyy HH:mm"
+            }}
+          </td>
+
+
+          <td>
+
+            <div class="copy-value">
+
+                <span>
+                  #{{ user.id }}
+                </span>
+
+              <button
+                type="button"
+                class="small-button"
+                (click)="copyId(user)"
+              >
+                Copy
+              </button>
+
+            </div>
+
+          </td>
+
+
+          <td class="actions-column">
+
+            <button
+              type="button"
+              class="view-button"
+              (click)="viewUser(user)"
+            >
+              View
+            </button>
+
+            <button
+              type="button"
+              class="edit-button"
+              (click)="startEdit(user)"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              class="status-button"
+              (click)="toggleUserStatus(user)"
+            >
+              {{
+                user.active !== false
+                  ? "Disable"
+                  : "Enable"
+              }}
+            </button>
+
+            <button
+              type="button"
+              class="delete-button"
+              (click)="deleteUser(user)"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- PAGINATION -->
+
+    <div
+      *ngIf="
+        filteredUsers.length > 0
+      "
+      class="pagination"
+    >
+
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="currentPage === 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+
+      <span>
+        Page
+        {{ currentPage }}
+        /
+        {{ totalPages }}
+      </span>
+
+
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="
+          currentPage === totalPages
+        "
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- DETAILS DRAWER -->
+
+<div
+  *ngIf="selectedUser"
+  class="drawer-backdrop"
+  (click)="closeDetails()"
+>
+
+  <aside
+    class="drawer"
+    (click)="$event.stopPropagation()"
+  >
+
+    <div class="drawer-header">
+
+      <h2>
+        User details
+      </h2>
+
+      <button
+        type="button"
+        class="close-button"
+        (click)="closeDetails()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="drawer-avatar">
+      {{
+        selectedUser.name
+          .charAt(0)
+          .toUpperCase()
+      }}
+    </div>
+
+
+    <h3>
+      {{ selectedUser.name }}
+    </h3>
+
+
+    <div class="detail-row">
+      <span>ID</span>
+
+      <strong>
+        #{{ selectedUser.id }}
+      </strong>
+    </div>
+
+
+    <div class="detail-row">
+      <span>Email</span>
+
+      <strong>
+        {{ selectedUser.email }}
+      </strong>
+    </div>
+
+
+    <div class="detail-row">
+      <span>Status</span>
+
+      <strong>
+        {{
+          selectedUser.active !== false
+            ? "Active"
+            : "Disabled"
+        }}
+      </strong>
+    </div>
+
+
+    <div class="detail-row">
+      <span>Created</span>
+
+      <strong>
+        {{
+          selectedUser.createdAt
+            | date:"dd/MM/yyyy HH:mm"
+        }}
+      </strong>
+    </div>
+
+
+    <div class="drawer-actions">
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="copyId(selectedUser)"
+      >
+        Copy ID
+      </button>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="copyEmail(selectedUser)"
+      >
+        Copy email
+      </button>
+
+    </div>
+
+  </aside>
+
+</div>

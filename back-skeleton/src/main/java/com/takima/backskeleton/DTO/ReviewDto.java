@@ -4,12 +4,17 @@ import java.time.LocalDateTime;
 
 public class ReviewDto {
 
+    private Long id;
     private Integer rating;
     private String summary;
     private String details;
     private LocalDateTime createdAt;
     private Long userId;
     private Long restaurantId;
+
+    public Long getId() {
+        return id;
+    }
 
     public Integer getRating() {
         return rating;
@@ -36,6 +41,8 @@ public class ReviewDto {
     }
 
     public static final class ReviewDtoBuilder {
+
+        private Long id;
         private Integer rating;
         private String summary;
         private String details;
@@ -48,6 +55,11 @@ public class ReviewDto {
 
         public static ReviewDtoBuilder aReviewDto() {
             return new ReviewDtoBuilder();
+        }
+
+        public ReviewDtoBuilder id(Long id) {
+            this.id = id;
+            return this;
         }
 
         public ReviewDtoBuilder rating(Integer rating) {
@@ -82,12 +94,15 @@ public class ReviewDto {
 
         public ReviewDto build() {
             ReviewDto reviewDto = new ReviewDto();
+
+            reviewDto.id = this.id;
             reviewDto.rating = this.rating;
             reviewDto.summary = this.summary;
             reviewDto.details = this.details;
             reviewDto.createdAt = this.createdAt;
             reviewDto.userId = this.userId;
             reviewDto.restaurantId = this.restaurantId;
+
             return reviewDto;
         }
     }

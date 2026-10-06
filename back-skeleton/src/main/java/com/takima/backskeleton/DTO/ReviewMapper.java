@@ -13,6 +13,7 @@ public class ReviewMapper {
             Restaurant restaurant
     ) {
         Review review = new Review();
+
         review.setId(id);
         review.setRating(dto.getRating());
         review.setSummary(dto.getSummary());
@@ -20,11 +21,13 @@ public class ReviewMapper {
         review.setCreatedAt(dto.getCreatedAt());
         review.setUser(user);
         review.setRestaurant(restaurant);
+
         return review;
     }
 
     public static ReviewDto toDto(Review review) {
         return new ReviewDto.ReviewDtoBuilder()
+                .id(review.getId())
                 .rating(review.getRating())
                 .summary(review.getSummary())
                 .details(review.getDetails())

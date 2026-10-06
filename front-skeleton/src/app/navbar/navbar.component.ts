@@ -11,13 +11,10 @@ export class NavbarComponent {
       name: "Home",
       href: "/",
     },
+
     {
-      name: "Restaurants",
-      href: "/restaurants",
-    },
-    {
-      name: "Reviews",
-      href: "/reviews",
+      name: "Favorite",
+      href: "/favorite",
     },
     {
       name: "Users",

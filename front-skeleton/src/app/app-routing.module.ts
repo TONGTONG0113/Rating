@@ -1,44 +1,27 @@
 import { NgModule } from "@angular/core"
 import { RouterModule, Routes } from "@angular/router"
-import { HomeComponent } from "home/home.component"
-import { StudentsComponent } from "students/students.component"
-import { StudentsResolver } from "students/students.resolver"
-import { StudentDetailsComponent } from "students/student-details/student-details.component"
-import { StudentDetailsResolver } from "students/student-details/student-details.resolver"
-import { MajorsComponent } from "majors/majors.component"
-import { MajorsResolver } from "majors/majors.resolver"
-import { MajorStudentsResolver } from "majors/major-students/major-students.resolver"
-import { MajorStudentsComponent } from "majors/major-students/major-students.component"
+
+import { HomeComponent } from "./home/home.component"
+import { UsersComponent } from "./users/users.component"
+import { RestaurantComponent } from "./restaurant/restaurant.component"
+import { RestaurantDetailComponent } from "./restaurant-detail/restaurant-detail.component"
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
   {
-    path: "etudiants",
-    component: StudentsComponent,
-    resolve: {
-      students: StudentsResolver,
-    },
+    path: "",
+    component: HomeComponent,
   },
   {
-    path: "details-etudiant/:id",
-    component: StudentDetailsComponent,
-    resolve: {
-      student: StudentDetailsResolver,
-    },
+    path: "users",
+    component: UsersComponent,
   },
   {
-    path: "filieres",
-    component: MajorsComponent,
-    resolve: {
-      majors: MajorsResolver,
-    },
+    path: "restaurants",
+    component: RestaurantComponent,
   },
   {
-    path: "etudiants-filiere/:id",
-    component: MajorStudentsComponent,
-    resolve: {
-      studentsFromMajor: MajorStudentsResolver,
-    },
+    path: "restaurants/:id",
+    component: RestaurantDetailComponent,
   },
 ]
 

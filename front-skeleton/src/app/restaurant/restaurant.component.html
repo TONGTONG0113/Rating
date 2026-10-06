@@ -1,0 +1,314 @@
+<div class="restaurant-page">
+
+  <!-- Page Header -->
+  <section class="restaurant-header">
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        RESTAURANT REVIEWS
+      </span>
+
+      <h1>Discover restaurants</h1>
+
+      <p>
+        Find the best restaurants, compare ratings
+        and discover new places to eat.
+      </p>
+
+      <!-- Search -->
+      <div class="search-box">
+
+        <span class="search-icon">⌕</span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search restaurant, cuisine..."
+        />
+
+        <span class="location">
+          📍 Paris
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Results header -->
+    <div class="results-header">
+
+      <div>
+        <h2>Restaurants</h2>
+
+        <p>
+          {{ filteredRestaurants.length }}
+          restaurants found
+        </p>
+      </div>
+
+      <button
+        class="reset-button"
+        (click)="resetFilters()"
+      >
+        Reset filters
+      </button>
+
+    </div>
+
+
+    <div class="restaurant-layout">
+
+
+      <!-- FILTERS -->
+      <aside class="filters">
+
+        <div class="filter-title">
+          <h3>Filters</h3>
+        </div>
+
+
+        <!-- Cuisine -->
+        <div class="filter-group">
+
+          <h4>Cuisine</h4>
+
+          <label
+            *ngFor="let category of categories"
+            class="filter-option"
+          >
+
+            <input
+              type="radio"
+              name="category"
+              [value]="category"
+              [(ngModel)]="selectedCategory"
+            />
+
+            <span>
+              {{ category }}
+            </span>
+
+          </label>
+
+        </div>
+
+
+        <!-- Price -->
+        <div class="filter-group">
+
+          <h4>Price</h4>
+
+          <label
+            *ngFor="let price of prices"
+            class="filter-option"
+          >
+
+            <input
+              type="radio"
+              name="price"
+              [value]="price"
+              [(ngModel)]="selectedPrice"
+            />
+
+            <span>
+              {{ price }}
+            </span>
+
+          </label>
+
+        </div>
+
+
+        <!-- Rating -->
+        <div class="filter-group">
+
+          <h4>Minimum rating</h4>
+
+          <label class="filter-option">
+
+            <input
+              type="radio"
+              name="rating"
+              [value]="0"
+              [(ngModel)]="selectedRating"
+            />
+
+            <span>All ratings</span>
+
+          </label>
+
+          <label class="filter-option">
+
+            <input
+              type="radio"
+              name="rating"
+              [value]="4"
+              [(ngModel)]="selectedRating"
+            />
+
+            <span>⭐ 4.0+</span>
+
+          </label>
+
+          <label class="filter-option">
+
+            <input
+              type="radio"
+              name="rating"
+              [value]="4.5"
+              [(ngModel)]="selectedRating"
+            />
+
+            <span>⭐ 4.5+</span>
+
+          </label>
+
+        </div>
+
+      </aside>
+
+
+      <!-- RESTAURANTS -->
+      <section class="restaurant-results">
+
+
+        <!-- Empty -->
+        <div
+          *ngIf="filteredRestaurants.length === 0"
+          class="empty-state"
+        >
+
+          <div class="empty-icon">
+            🍽️
+          </div>
+
+          <h3>No restaurants found</h3>
+
+          <p>
+            Try changing your search or filters.
+          </p>
+
+          <button
+            class="primary-button"
+            (click)="resetFilters()"
+          >
+            Reset filters
+          </button>
+
+        </div>
+
+
+        <!-- Cards -->
+        <div
+          class="restaurant-grid"
+          *ngIf="filteredRestaurants.length > 0"
+        >
+
+          <article
+            class="restaurant-card"
+            *ngFor="let restaurant of filteredRestaurants"
+          >
+
+            <!-- Image -->
+            <div class="card-image">
+
+              <img
+                [src]="restaurant.image"
+                [alt]="restaurant.name"
+              />
+
+              <span class="category-badge">
+                {{ restaurant.category }}
+              </span>
+
+              <button
+                class="favorite-button"
+              >
+                ♡
+              </button>
+
+            </div>
+
+
+            <!-- Content -->
+            <div class="card-content">
+
+              <h3>
+                {{ restaurant.name }}
+              </h3>
+
+
+              <!-- Rating -->
+              <div class="rating">
+
+                <span class="star">
+                  ★
+                </span>
+
+                <strong>
+                  {{ restaurant.rating }}
+                </strong>
+
+                <span class="review-count">
+                  ({{ restaurant.reviews }} reviews)
+                </span>
+
+              </div>
+
+
+              <!-- Info -->
+              <div class="restaurant-info">
+
+                <span>
+                  {{ restaurant.category }}
+                </span>
+
+                <span>
+                  ·
+                </span>
+
+                <span>
+                  {{ restaurant.price }}
+                </span>
+
+              </div>
+
+
+              <div class="address">
+                📍 {{ restaurant.address }}
+              </div>
+
+
+              <p class="description">
+                {{ restaurant.description }}
+              </p>
+
+
+              <button
+                class="details-button"
+                [routerLink]="['/restaurants', restaurant.id]"
+              >
+                View restaurant
+                <span>→</span>
+              </button>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>

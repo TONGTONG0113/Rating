@@ -1,12 +1,30 @@
-<nav>
-  <div>
-    <img src="assets/takima-logo.png" routerLink="" />
-    <mat-nav-list>
-      @for (link of links; track link) {
-      <a mat-list-item routerLink="{{ link.href }}" routerLinkActive="active">
-        <span>{{ link.name }}</span>
-      </a>
-      }
-    </mat-nav-list>
-  </div>
-</nav>
+<header class="navbar">
+
+  <a
+    class="brand"
+    routerLink="/"
+  >
+    <div class="brand-icon">
+      R
+    </div>
+
+    <div class="brand-text">
+      <strong>Rating</strong>
+      <span>Restaurant reviews</span>
+    </div>
+  </a>
+
+  <nav class="nav-links">
+
+    <a
+      *ngFor="let link of links"
+      [routerLink]="link.href"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: link.href === '/' }"
+    >
+      {{ link.name }}
+    </a>
+
+  </nav>
+
+</header>

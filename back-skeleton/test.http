@@ -1,0 +1,69 @@
+### 1. 查询全部用户
+GET http://localhost:8080/api/users
+
+
+### 2. 查询存在的用户
+GET http://localhost:8080/api/users/1
+
+
+### 3. 查询不存在的用户
+GET http://localhost:8080/api/users/9999
+
+
+### 4. 新增用户
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Emma",
+  "email": "emma@example.com"
+}
+
+
+### 5. 测试重复邮箱
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Emma Duplicate",
+  "email": "emma@example.com"
+}
+
+
+### 6. 测试空名字
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "emptyname@example.com"
+}
+
+
+### 7. 修改用户 1
+PUT http://localhost:8080/api/users/1
+Content-Type: application/json
+
+{
+  "name": "Alice Updated",
+  "email": "alice.updated@example.com"
+}
+
+
+### 8. 修改不存在的用户
+PUT http://localhost:8080/api/users/9999
+Content-Type: application/json
+
+{
+  "name": "Nobody",
+  "email": "nobody@example.com"
+}
+
+
+### 9. 删除 Emma
+### 注意：如果 Emma 创建后的 id 不是 5，把下面的 5 改成实际 id
+DELETE http://localhost:8080/api/users/5
+
+
+### 10. 删除不存在的用户
+DELETE http://localhost:8080/api/users/9999

@@ -13,8 +13,27 @@ import { AppComponent } from "./app.component"
 import { NavbarComponent } from "./navbar/navbar.component"
 import { HomeComponent } from "./home/home.component"
 
+import { StudentsComponent } from "students/students.component"
+import { StudentDetailsComponent } from "students/student-details/student-details.component"
+
+import { MajorsComponent } from "majors/majors.component"
+import { MajorStudentsComponent } from "majors/major-students/major-students.component"
+
+import { RestaurantComponent } from "./restaurant/restaurant.component"
+import { RestaurantDetailComponent } from "./restaurant-detail/restaurant-detail.component"
+
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    StudentsComponent,
+    StudentDetailsComponent,
+    MajorsComponent,
+    MajorStudentsComponent,
+    RestaurantComponent,
+    RestaurantDetailComponent,
+  ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -24,8 +43,11 @@ import { HomeComponent } from "./home/home.component"
     MatListModule,
     MatIconModule,
     MatButtonModule,
+    HomeComponent,
   ],
+
   providers: [],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}

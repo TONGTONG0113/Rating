@@ -1,0 +1,505 @@
+.restaurant-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.restaurant-header {
+  background: #111827;
+  color: white;
+  padding: 55px 24px 65px;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #60a5fa;
+}
+
+.restaurant-header h1 {
+  margin: 15px 0 10px;
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.restaurant-header p {
+  margin: 0 0 30px;
+  color: #cbd5e1;
+  font-size: 16px;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+  max-width: 850px;
+
+  display: flex;
+  align-items: center;
+
+  background: white;
+  border-radius: 12px;
+
+  padding: 6px;
+
+  color: #64748b;
+}
+
+.search-icon {
+  padding: 0 15px;
+  font-size: 22px;
+}
+
+.search-box input {
+  flex: 1;
+
+  border: none;
+  outline: none;
+
+  font-size: 14px;
+
+  padding: 14px 5px;
+
+  color: #1e293b;
+}
+
+.location {
+  padding: 0 20px;
+
+  border-left: 1px solid #e5e7eb;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main-content {
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 40px 24px 70px;
+}
+
+
+/* =========================
+   RESULTS HEADER
+========================= */
+
+.results-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 25px;
+}
+
+.results-header h2 {
+  margin: 0 0 5px;
+
+  font-size: 27px;
+}
+
+.results-header p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.reset-button {
+  border: none;
+
+  background: transparent;
+
+  color: #2563eb;
+
+  cursor: pointer;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   LAYOUT
+========================= */
+
+.restaurant-layout {
+  display: grid;
+
+  grid-template-columns: 230px 1fr;
+
+  gap: 30px;
+
+  align-items: start;
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+.filters {
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  position: sticky;
+
+  top: 20px;
+}
+
+.filter-title {
+  padding-bottom: 15px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-title h3 {
+  margin: 0;
+
+  font-size: 17px;
+}
+
+.filter-group {
+  padding: 20px 0;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-group:last-child {
+  border-bottom: none;
+}
+
+.filter-group h4 {
+  margin: 0 0 12px;
+
+  font-size: 14px;
+}
+
+.filter-option {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin: 12px 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+.filter-option input {
+  accent-color: #2563eb;
+}
+
+
+/* =========================
+   RESTAURANT GRID
+========================= */
+
+.restaurant-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.restaurant-card {
+  overflow: hidden;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  transition: 0.2s;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+
+/* IMAGE */
+
+.card-image {
+  height: 180px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.3s;
+}
+
+.restaurant-card:hover img {
+  transform: scale(1.04);
+}
+
+.category-badge {
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  background: white;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.favorite-button {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: white;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+
+/* CONTENT */
+
+.card-content {
+  padding: 17px;
+}
+
+.card-content h3 {
+  margin: 0 0 9px;
+
+  font-size: 18px;
+}
+
+.rating {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-bottom: 10px;
+
+  font-size: 14px;
+}
+
+.star {
+  color: #f59e0b;
+}
+
+.review-count {
+  color: #94a3b8;
+
+  font-size: 12px;
+}
+
+.restaurant-info {
+  display: flex;
+
+  gap: 7px;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  margin-bottom: 8px;
+}
+
+.address {
+  color: #64748b;
+
+  font-size: 13px;
+
+  margin-bottom: 10px;
+}
+
+.description {
+  height: 40px;
+
+  margin: 0 0 16px;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  overflow: hidden;
+}
+
+
+/* BUTTON */
+
+.details-button {
+  width: 100%;
+
+  padding: 10px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.details-button:hover {
+  background: #dbeafe;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+  padding: 70px 20px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 40px;
+
+  margin-bottom: 15px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+}
+
+.empty-state p {
+  color: #64748b;
+}
+
+.primary-button {
+  padding: 10px 18px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #2563eb;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .restaurant-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 750px) {
+
+  .restaurant-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .filters {
+    position: static;
+  }
+
+  .restaurant-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .restaurant-header h1 {
+    font-size: 34px;
+  }
+
+  .search-box {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .location {
+    padding: 12px;
+
+    border-left: none;
+
+    border-top: 1px solid #e5e7eb;
+  }
+
+}

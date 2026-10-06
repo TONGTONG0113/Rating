@@ -1,0 +1,213 @@
+<div
+  class="detail-page"
+  *ngIf="restaurant"
+>
+
+  <main class="detail-container">
+
+    <a
+      routerLink="/restaurants"
+      class="back-link"
+    >
+      ← Back to restaurants
+    </a>
+
+
+    <!-- Hero Image -->
+
+    <div class="restaurant-image">
+
+      <img
+        [src]="restaurant.image"
+        [alt]="restaurant.name"
+      />
+
+    </div>
+
+
+    <!-- Main information -->
+
+    <section class="restaurant-info">
+
+      <div class="title-row">
+
+        <div>
+
+          <h1>
+            {{ restaurant.name }}
+          </h1>
+
+          <div class="meta">
+
+            <span>
+              {{ restaurant.category }}
+            </span>
+
+            <span>·</span>
+
+            <span>
+              {{ restaurant.price }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <button class="favorite">
+          ♡
+        </button>
+
+      </div>
+
+
+      <div class="rating">
+
+        <span class="star">
+          ★
+        </span>
+
+        <strong>
+          {{ restaurant.rating }}
+        </strong>
+
+        <span>
+          {{ restaurant.reviews }} reviews
+        </span>
+
+      </div>
+
+
+      <div class="address">
+
+        📍 {{ restaurant.address }}
+
+      </div>
+
+    </section>
+
+
+    <!-- About -->
+
+    <section class="content-section">
+
+      <h2>About</h2>
+
+      <p>
+        {{ restaurant.description }}
+      </p>
+
+    </section>
+
+
+    <!-- Opening hours -->
+
+    <section class="content-section">
+
+      <h2>Opening hours</h2>
+
+      <div class="opening-hours">
+
+        <div>
+          <span>Monday</span>
+          <span>12:00 – 22:30</span>
+        </div>
+
+        <div>
+          <span>Tuesday</span>
+          <span>12:00 – 22:30</span>
+        </div>
+
+        <div>
+          <span>Wednesday</span>
+          <span>12:00 – 22:30</span>
+        </div>
+
+        <div>
+          <span>Thursday</span>
+          <span>12:00 – 22:30</span>
+        </div>
+
+        <div>
+          <span>Friday</span>
+          <span>12:00 – 23:00</span>
+        </div>
+
+        <div>
+          <span>Saturday</span>
+          <span>12:00 – 23:00</span>
+        </div>
+
+        <div>
+          <span>Sunday</span>
+          <span>Closed</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Reviews -->
+
+    <section class="content-section">
+
+      <div class="reviews-header">
+
+        <h2>
+          Customer reviews
+        </h2>
+
+        <button class="review-button">
+          Write a review
+        </button>
+
+      </div>
+
+
+      <div class="review">
+
+        <div class="review-top">
+
+          <strong>
+            User
+          </strong>
+
+          <span>
+            ★★★★★
+          </span>
+
+        </div>
+
+        <p>
+          Excellent restaurant, très bon service.
+        </p>
+
+      </div>
+
+
+      <div class="review">
+
+        <div class="review-top">
+
+          <strong>
+            User
+          </strong>
+
+          <span>
+            ★★★★☆
+          </span>
+
+        </div>
+
+        <p>
+          Très bonne expérience. Je recommande.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

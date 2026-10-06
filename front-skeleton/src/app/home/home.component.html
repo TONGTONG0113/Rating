@@ -1,28 +1,87 @@
-<span class="title">Bonjour à vous !</span>
-<div>
-  <span class="welcome">Bienvenue sur ce super template de code Angular </span>
-  <img src="assets/sun.gif" height="100">
-</div>
-<span class="title">Qu'est ce que vous allez faire pendant ce cours ?</span>
-<div class="card-group">
-  <div class="card">
-    <img class="card-img-top" src="assets/img1.png" alt="Card image cap" />
-    <div class="card-body">
-      <p class="card-text">
-        Une merveilleuse web app from scratch JAVA Spring - Angular
+<div class="home-page">
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <div class="hero-badge">
+        RESTAURANT REVIEWS
+      </div>
+
+      <h1>
+        Find your next
+        <span>favorite restaurant.</span>
+      </h1>
+
+      <p>
+        Discover the best restaurants around you,
+        read reviews and share your experience.
       </p>
+
+
+      <!-- Search -->
+      <div class="search-container">
+
+        <div class="search-field">
+
+          <span class="search-icon">⌕</span>
+
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Restaurant, cuisine..."
+          />
+
+        </div>
+
+
+        <div class="location-field">
+
+          <span>📍</span>
+
+          <input
+            type="text"
+            [(ngModel)]="location"
+            placeholder="Paris"
+          />
+
+        </div>
+
+
+        <button
+          class="search-button"
+          (click)="searchRestaurants()"
+        >
+          Search
+        </button>
+
+      </div>
+
     </div>
-  </div>
-  <div class="card">
-    <img class="card-img-top" src="assets/img2.png" alt="Card image cap" />
-    <div class="card-body">
-      <p class="card-text">Avec une super team de 3 ou 4 personnes</p>
+
+  </section>
+
+
+  <!-- Popular cuisines -->
+
+  <section class="popular">
+
+    <h2>Popular cuisines</h2>
+
+    <p>Explore restaurants by cuisine</p>
+
+
+    <div class="cuisine-list">
+
+      <button
+        *ngFor="let cuisine of cuisines"
+        (click)="searchCuisine(cuisine)"
+      >
+        {{ cuisine }}
+      </button>
+
     </div>
-  </div>
-  <div class="card">
-    <img class="card-img-top" src="assets/img3.png" alt="Card image cap" />
-    <div class="card-body">
-      <p class="card-text">Encadrés par un intervenant prêt à dégainer sa magie noire pour vous aider</p>
-    </div>
-  </div>
+
+  </section>
+
 </div>

@@ -1,113 +1,58 @@
-<div
-  class="detail-page"
-  *ngIf="restaurant"
->
 
+<div class="detail-page" *ngIf="restaurant">
   <main class="detail-container">
-
-    <a
-      routerLink="/restaurants"
-      class="back-link"
-    >
+    <a routerLink="/restaurants" class="back-link">
       ← Back to restaurants
     </a>
 
-
     <!-- Hero Image -->
-
     <div class="restaurant-image">
-
       <img
         [src]="restaurant.image"
         [alt]="restaurant.name"
       />
-
     </div>
 
-
     <!-- Main information -->
-
     <section class="restaurant-info">
-
       <div class="title-row">
-
         <div>
-
-          <h1>
-            {{ restaurant.name }}
-          </h1>
+          <h1>{{ restaurant.name }}</h1>
 
           <div class="meta">
-
-            <span>
-              {{ restaurant.category }}
-            </span>
-
+            <span>{{ restaurant.category }}</span>
             <span>·</span>
-
-            <span>
-              {{ restaurant.price }}
-            </span>
-
+            <span>{{ restaurant.price }}</span>
           </div>
-
         </div>
 
-
-        <button class="favorite">
+        <button class="favorite" type="button" aria-label="Favorite">
           ♡
         </button>
-
       </div>
-
 
       <div class="rating">
-
-        <span class="star">
-          ★
-        </span>
-
-        <strong>
-          {{ restaurant.rating }}
-        </strong>
-
-        <span>
-          {{ restaurant.reviews }} reviews
-        </span>
-
+        <span class="star">★</span>
+        <strong>{{ restaurant.rating }}</strong>
+        <span>{{ restaurant.reviews }} reviews</span>
       </div>
-
 
       <div class="address">
-
         📍 {{ restaurant.address }}
-
       </div>
-
     </section>
-
 
     <!-- About -->
-
     <section class="content-section">
-
       <h2>About</h2>
-
-      <p>
-        {{ restaurant.description }}
-      </p>
-
+      <p>{{ restaurant.description }}</p>
     </section>
 
-
     <!-- Opening hours -->
-
     <section class="content-section">
-
       <h2>Opening hours</h2>
 
       <div class="opening-hours">
-
         <div>
           <span>Monday</span>
           <span>12:00 – 22:30</span>
@@ -142,72 +87,151 @@
           <span>Sunday</span>
           <span>Closed</span>
         </div>
-
       </div>
-
     </section>
-
 
     <!-- Reviews -->
-
     <section class="content-section">
-
       <div class="reviews-header">
+        <h2>Customer reviews ({{ reviews.length }})</h2>
 
-        <h2>
-          Customer reviews
-        </h2>
-
-        <button class="review-button">
+        <button
+          class="review-button"
+          type="button"
+          (click)="openReviewForm()"
+        >
           Write a review
         </button>
-
       </div>
 
+      <!-- Submit result -->
+      <p
+        *ngIf="submitMessage"
+        role="status"
+        [class.error-message]="submitMessageIsError"
+        [class.success-message]="!submitMessageIsError"
+      >
+        {{ submitMessage }}
+      </p>
 
-      <div class="review">
+      <!-- Review form -->
+      <form
+        class="review-form"
+        *ngIf="showReviewForm"
+        (ngSubmit)="submitReview()"
+      >
+        <h3>Write your review</h3>
 
+        <label for="reviewRating">Rating</label>
+        <select
+          id="reviewRating"
+          name="reviewRating"
+          [(ngModel)]="reviewRating"
+          required
+        >
+          <option [ngValue]="5">5 - Excellent</option>
+          <option [ngValue]="4">4 - Very good</option>
+          <option [ngValue]="3">3 - Good</option>
+          <option [ngValue]="2">2 - Fair</option>
+          <option [ngValue]="1">1 - Poor</option>
+        </select>
+
+        <label for="reviewSummary">Title</label>
+        <input
+          id="reviewSummary"
+          name="reviewSummary"
+          type="text"
+          [(ngModel)]="reviewSummary"
+          placeholder="Summarize your experience"
+          maxlength="150"
+          required
+        />
+
+        <label for="reviewDetails">Comment (optional)</label>
+        <textarea
+          id="reviewDetails"
+          name="reviewDetails"
+          [(ngModel)]="reviewDetails"
+          placeholder="Tell us more about your experience"
+          rows="4"
+        ></textarea>
+
+        <div class="review-form-actions">
+          <button
+            class="review-button"
+            type="submit"
+            [disabled]="submittingReview"
+          >
+            {{
+              submittingReview
+                ? "Publishing..."
+                : "Publish review"
+            }}
+          </button>
+
+          <button
+            type="button"
+            (click)="cancelReviewForm()"
+            [disabled]="submittingReview"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <!-- Loading -->
+      <p *ngIf="reviewsLoading">Loading reviews...</p>
+
+      <!-- Load error -->
+      <p *ngIf="!reviewsLoading && reviewsError" role="alert">
+        {{ reviewsError }}
+      </p>
+
+      <!-- Empty state -->
+      <p
+        *ngIf="
+          !reviewsLoading &&
+          !reviewsError &&
+          reviews.length === 0
+        "
+      >
+        No reviews yet for this restaurant.
+      </p>
+
+      <!-- Review list -->
+      <div
+        class="review"
+        *ngFor="let review of reviews"
+      >
         <div class="review-top">
+          <strong>{{ review.userName || "User" }}</strong>
 
-          <strong>
-            User
-          </strong>
-
-          <span>
-            ★★★★★
+          <span class="star">
+            ★ {{ review.rating }}/5
           </span>
-
         </div>
 
-        <p>
-          Excellent restaurant, très bon service.
+        <h3>{{ review.summary }}</h3>
+
+        <p *ngIf="review.details">
+          {{ review.details }}
         </p>
 
+        <small *ngIf="review.createdAt">
+          {{ review.createdAt | date: "dd/MM/yyyy HH:mm" }}
+        </small>
       </div>
-
-
-      <div class="review">
-
-        <div class="review-top">
-
-          <strong>
-            User
-          </strong>
-
-          <span>
-            ★★★★☆
-          </span>
-
-        </div>
-
-        <p>
-          Très bonne expérience. Je recommande.
-        </p>
-
-      </div>
-
     </section>
-
   </main>
+</div>
 
+<!-- Invalid restaurant ID -->
+<div class="detail-page" *ngIf="!restaurant">
+  <main class="detail-container">
+    <p *ngIf="!reviewsError">Loading restaurant...</p>
+    <p *ngIf="reviewsError">{{ reviewsError }}</p>
+    <a routerLink="/restaurants" class="back-link">
+      ← Back to restaurants
+    </a>
+  </main>
 </div>

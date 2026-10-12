@@ -1,100 +1,182 @@
 
 <div class="restaurant-page">
-  <header class="page-header">
-    <div>
-      <p class="eyebrow">DISCOVER PARIS</p>
-      <h1>Restaurants</h1>
-      <p class="subtitle">Find your next favourite restaurant.</p>
+  <section class="page-intro">
+    <div class="intro-copy">
+      <span class="eyebrow">BONAPPÉTIT · PARIS</span>
+      <h1>Find your next<br /><span>favourite table.</span></h1>
+      <p>
+        From neighbourhood gems to unforgettable dining experiences,
+        discover the restaurants worth visiting in Paris.
+      </p>
     </div>
 
-    <div class="restaurant-count">
-      {{ filteredRestaurants.length }} restaurants
+    <div class="intro-decoration" aria-hidden="true">
+      <span class="decoration-circle"></span>
+      <span class="decoration-text">GOOD FOOD<br />GOOD MOMENTS</span>
     </div>
-  </header>
+  </section>
 
-  <div class="search-bar">
-    <span class="search-icon">⌕</span>
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      placeholder="Search by restaurant name or address..."
-      aria-label="Search restaurants"
-    />
-    <button
-      *ngIf="searchTerm"
-      type="button"
-      class="clear-button"
-      (click)="searchTerm = ''"
-    >
-      Clear
-    </button>
-  </div>
-
-  <p *ngIf="loading" class="status-message">
-    Loading restaurants...
-  </p>
-
-  <div *ngIf="errorMessage && !loading" class="error-message">
-    {{ errorMessage }}
-    <button type="button" (click)="loadRestaurants()">Retry</button>
-  </div>
-
-  <div
-    *ngIf="!loading && !errorMessage && filteredRestaurants.length === 0"
-    class="empty-state"
-  >
-    <h2>No restaurants found</h2>
-    <p>Try another name or address.</p>
-  </div>
-
-  <div
-    class="restaurant-grid"
-    *ngIf="!loading && !errorMessage && filteredRestaurants.length > 0"
-  >
-    <article
-      class="restaurant-card"
-      *ngFor="let restaurant of filteredRestaurants"
-    >
-      <div class="image-container">
-        <img
-          *ngIf="!failedImages.has(restaurant.id) && restaurant.imageUrl"
-          [src]="restaurant.imageUrl"
-          [alt]="restaurant.title"
-          class="restaurant-image"
-          loading="lazy"
-          (error)="onImageError(restaurant.id)"
-        />
-
-        <div
-          *ngIf="failedImages.has(restaurant.id) || !restaurant.imageUrl"
-          class="image-placeholder"
-        >
-          <span class="placeholder-icon">🍽</span>
-          <span>Image unavailable</span>
-        </div>
+  <section class="discovery-section">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">EXPLORE THE CITY</span>
+        <h2>Restaurants in Paris</h2>
+        <p>Find the right place for your next meal.</p>
       </div>
 
-      <div class="restaurant-content">
-        <h2>{{ restaurant.title }}</h2>
+      <div class="result-count">
+        <strong>{{ filteredRestaurants.length }}</strong>
+        <span>
+          {{ filteredRestaurants.length === 1 ? 'restaurant' : 'restaurants' }}
+        </span>
+      </div>
+    </div>
 
-        <p class="restaurant-address">
-          <span class="info-icon">⌖</span>
-          <span>{{ restaurant.address }}</span>
-        </p>
+    <div class="search-bar">
+      <svg
+        class="search-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle cx="10.8" cy="10.8" r="6.8"></circle>
+        <path d="m16 16 4.5 4.5"></path>
+      </svg>
 
-        <p class="restaurant-hours">
-          <span class="info-icon">◷</span>
-          <span>Opening hours: {{ restaurant.openingHours }}</span>
-        </p>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by restaurant name or address..."
+        aria-label="Search restaurants"
+      />
 
+      <button
+        *ngIf="searchTerm"
+        type="button"
+        class="clear-button"
+        (click)="searchTerm = ''"
+        aria-label="Clear search"
+      >
+        Clear
+      </button>
+    </div>
+
+    <div *ngIf="loading" class="status-panel">
+      <span class="loading-spinner"></span>
+      <p>Finding great places for you...</p>
+    </div>
+
+    <div *ngIf="errorMessage && !loading" class="status-panel error-panel">
+      <h3>We couldn't load the restaurants.</h3>
+      <p>{{ errorMessage }}</p>
+      <button type="button" class="retry-button" (click)="loadRestaurants()">
+        Try again
+      </button>
+    </div>
+
+    <div
+      *ngIf="!loading && !errorMessage && filteredRestaurants.length === 0"
+      class="status-panel empty-panel"
+    >
+      <span class="empty-icon" aria-hidden="true">⌕</span>
+      <h3>No restaurants found</h3>
+      <p>Try another restaurant name or address.</p>
+      <button
+        *ngIf="searchTerm"
+        type="button"
+        class="retry-button"
+        (click)="searchTerm = ''"
+      >
+        Clear search
+      </button>
+    </div>
+
+    <div
+      class="restaurant-grid"
+      *ngIf="!loading && !errorMessage && filteredRestaurants.length > 0"
+    >
+      <article
+        class="restaurant-card"
+        *ngFor="let restaurant of filteredRestaurants"
+      >
         <a
-          class="details-button"
+          class="image-container"
           [routerLink]="['/restaurants', restaurant.id]"
+          [attr.aria-label]="'View ' + restaurant.title"
         >
-          View restaurant
-          <span aria-hidden="true">→</span>
+          <img
+            *ngIf="
+              !failedImages.has(restaurant.id) && restaurant.imageUrl
+            "
+            [src]="restaurant.imageUrl"
+            [alt]="restaurant.title"
+            class="restaurant-image"
+            loading="lazy"
+            (error)="onImageError(restaurant.id)"
+          />
+
+          <div
+            *ngIf="
+              failedImages.has(restaurant.id) || !restaurant.imageUrl
+            "
+            class="image-placeholder"
+          >
+            <span class="placeholder-icon" aria-hidden="true">✳</span>
+            <span>Photo unavailable</span>
+          </div>
+
+
         </a>
-      </div>
-    </article>
-  </div>
+
+        <div class="restaurant-content">
+          <div class="restaurant-title-row">
+            <h3>{{ restaurant.title }}</h3>
+          </div>
+
+          <div class="restaurant-information">
+            <div class="information-row">
+              <span class="information-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"
+                  ></path>
+                  <circle cx="12" cy="10" r="2.5"></circle>
+                </svg>
+              </span>
+
+              <span class="information-text">
+                {{ restaurant.address }}
+              </span>
+            </div>
+
+            <div class="information-row">
+              <span class="information-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v5l3 2"></path>
+                </svg>
+              </span>
+
+              <span class="information-text">
+                {{ restaurant.openingHours }}
+              </span>
+            </div>
+          </div>
+
+          <a
+            class="details-button"
+            [routerLink]="['/restaurants', restaurant.id]"
+          >
+            <span>Discover restaurant</span>
+            <span class="button-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <span>BONAPPÉTIT · PARIS</span>
+    <span>GOOD FOOD. GOOD MOMENTS.</span>
+  </footer>
 </div>

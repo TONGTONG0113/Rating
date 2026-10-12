@@ -1,38 +1,29 @@
-import { Component } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { FormsModule } from "@angular/forms"
-import { Router } from "@angular/router"
+import { Component, OnDestroy } from "@angular/core"
 
 @Component({
   selector: "app-home",
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: "./home.component.html",
-  styleUrl: "./home.component.scss",
+  styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent {
-  searchTerm = ""
-  location = "Paris"
+export class HomeComponent implements OnDestroy {
+  heroImages: string[] = [
+    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=85",
+    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1920&q=85",
+    "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=85",
+    "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1920&q=85",
+  ]
 
-  cuisines = ["Français", "Italien", "Japonais", "Chinois", "Indien", "Fast Food"]
+  activeSlide = 0
 
-  constructor(private router: Router) {}
+  private carouselTimer: ReturnType<typeof setInterval>
 
-  searchRestaurants(): void {
-    this.router.navigate(["/restaurants"], {
-      queryParams: {
-        search: this.searchTerm,
-        location: this.location,
-      },
-    })
+  constructor() {
+    this.carouselTimer = setInterval(() => {
+      this.activeSlide = (this.activeSlide + 1) % this.heroImages.length
+    }, 5000)
   }
 
-  searchCuisine(cuisine: string): void {
-    this.router.navigate(["/restaurants"], {
-      queryParams: {
-        category: cuisine,
-        location: this.location,
-      },
-    })
+  ngOnDestroy(): void {
+    clearInterval(this.carouselTimer)
   }
 }

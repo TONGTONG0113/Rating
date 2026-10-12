@@ -1,87 +1,45 @@
-<div class="home-page">
 
-  <section class="hero">
+<section class="hero-carousel">
+  <div
+    *ngFor="let image of heroImages; let i = index"
+    class="hero-slide"
+    [class.active]="i === activeSlide"
+    [style.background-image]="'url(&quot;' + image + '&quot;) '"
+  ></div>
 
-    <div class="hero-content">
+  <div class="hero-overlay"></div>
 
-      <div class="hero-badge">
-        RESTAURANT REVIEWS
-      </div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">BONAPPÉTIT · PARIS</span>
 
-      <h1>
-        Find your next
-        <span>favorite restaurant.</span>
-      </h1>
+    <h1>Every meal tells<br />a story.</h1>
 
-      <p>
-        Discover the best restaurants around you,
-        read reviews and share your experience.
-      </p>
+    <p>
+      Discover exceptional restaurants, explore new flavours,
+      and share your favourite experiences.
+    </p>
 
+    <button
+      class="discover-button"
+      type="button"
+      routerLink="/restaurants"
+    >
+      Explore restaurants <span>→</span>
+    </button>
 
-      <!-- Search -->
-      <div class="search-container">
-
-        <div class="search-field">
-
-          <span class="search-icon">⌕</span>
-
-          <input
-            type="text"
-            [(ngModel)]="searchTerm"
-            placeholder="Restaurant, cuisine..."
-          />
-
-        </div>
-
-
-        <div class="location-field">
-
-          <span>📍</span>
-
-          <input
-            type="text"
-            [(ngModel)]="location"
-            placeholder="Paris"
-          />
-
-        </div>
-
-
-        <button
-          class="search-button"
-          (click)="searchRestaurants()"
-        >
-          Search
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- Popular cuisines -->
-
-  <section class="popular">
-
-    <h2>Popular cuisines</h2>
-
-    <p>Explore restaurants by cuisine</p>
-
-
-    <div class="cuisine-list">
-
+    <div class="carousel-indicators">
       <button
-        *ngFor="let cuisine of cuisines"
-        (click)="searchCuisine(cuisine)"
-      >
-        {{ cuisine }}
-      </button>
-
+        *ngFor="let image of heroImages; let i = index"
+        type="button"
+        [class.active]="i === activeSlide"
+        [attr.aria-label]="'Show slide ' + (i + 1)"
+        (click)="activeSlide = i"
+      ></button>
     </div>
+  </div>
 
-  </section>
-
-</div>
+  <div class="hero-caption">
+    <span>GOOD FOOD. GOOD MOMENTS.</span>
+    <span>PARIS, FRANCE</span>
+  </div>
+</section>

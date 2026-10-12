@@ -1,279 +1,156 @@
-.home-page {
-  min-height: calc(100vh - 96px);
-  background: #f8fafc;
+
+:host {
+  display: block;
 }
 
+.hero-carousel {
+  position: relative;
+  min-height: 620px;
+  height: 78vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: #171717;
+  color: #fff;
+}
 
-/* HERO */
-
-.hero {
-  min-height: 600px;
-
-  background:
-    linear-gradient(
-      rgba(10, 18, 30, 0.68),
-      rgba(10, 18, 30, 0.78)
-    ),
-    url("/assets/restaurant-food.png");
-
+.hero-slide {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 1.2s ease, transform 6s ease;
 }
 
+.hero-slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(12, 15, 19, 0.82),
+    rgba(12, 15, 19, 0.48),
+    rgba(12, 15, 19, 0.12)
+  );
+}
 
 .hero-content {
-  width: 100%;
-  max-width: 900px;
-
-  text-align: center;
-
-  color: white;
+  position: relative;
+  z-index: 2;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 64px 40px;
 }
 
-
-.hero-badge {
-  display: inline-block;
-
-  padding: 7px 13px;
-
-  border-radius: 20px;
-
-  background: rgba(255, 255, 255, 0.1);
-
-  color: #93c5fd;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  letter-spacing: 1.5px;
-
-  margin-bottom: 25px;
-}
-
-
-.hero h1 {
-  margin: 0;
-
-  font-size: 58px;
-
-  line-height: 1.1;
-
-  font-weight: 800;
-
-  letter-spacing: -2px;
-}
-
-
-.hero h1 span {
+.hero-eyebrow {
   display: block;
-
-  color: #60a5fa;
+  margin-bottom: 24px;
+  color: #f4c47a;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
 }
 
-
-.hero p {
-  max-width: 620px;
-
-  margin: 25px auto 40px;
-
-  color: #cbd5e1;
-
-  font-size: 18px;
-
-  line-height: 1.6;
-}
-
-
-/* SEARCH */
-
-.search-container {
-  display: flex;
-
-  align-items: center;
-
-  max-width: 850px;
-
-  margin: 0 auto;
-
-  padding: 7px;
-
-  background: white;
-
-  border-radius: 14px;
-
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.25);
-}
-
-
-.search-field,
-.location-field {
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  height: 52px;
-
-  padding: 0 16px;
-
-  color: #64748b;
-}
-
-
-.search-field {
-  flex: 1;
-}
-
-
-.location-field {
-  width: 180px;
-
-  border-left: 1px solid #e5e7eb;
-}
-
-
-.search-field input,
-.location-field input {
-  width: 100%;
-
-  border: none;
-
-  outline: none;
-
-  font-size: 14px;
-
-  color: #1e293b;
-}
-
-
-.search-icon {
-  font-size: 22px;
-}
-
-
-.search-button {
-  height: 52px;
-
-  padding: 0 25px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #2563eb;
-
-  color: white;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-
-.search-button:hover {
-  background: #1d4ed8;
-}
-
-
-/* POPULAR */
-
-.popular {
-  max-width: 900px;
-
-  margin: 0 auto;
-
-  padding: 55px 24px;
-
-  text-align: center;
-}
-
-
-.popular h2 {
+.hero-content h1 {
   margin: 0;
-
-  font-size: 25px;
+  color: white;
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 800;
+  line-height: 1.05;
 }
 
-
-.popular p {
-  margin: 8px 0 25px;
-
-  color: #64748b;
+.hero-content p {
+  max-width: 580px;
+  margin: 28px 0 34px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  line-height: 1.8;
 }
 
-
-.cuisine-list {
-  display: flex;
-
-  justify-content: center;
-
-  flex-wrap: wrap;
-
-  gap: 12px;
-}
-
-
-.cuisine-list button {
-  padding: 10px 18px;
-
-  border: 1px solid #e2e8f0;
-
-  border-radius: 25px;
-
-  background: white;
-
-  color: #475569;
-
+.discover-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  padding: 18px 28px;
+  border: 0;
+  border-radius: 6px;
+  background: #f4c47a;
+  color: #1c1c1c;
+  font-size: 17px;
+  font-weight: 700;
   cursor: pointer;
-
-  transition: 0.2s;
+  transition: background 0.2s, transform 0.2s;
 }
 
-
-.cuisine-list button:hover {
-  border-color: #2563eb;
-
-  color: #2563eb;
-
-  background: #eff6ff;
+.discover-button:hover {
+  background: #ffd89c;
+  transform: translateY(-2px);
 }
 
+.discover-button span {
+  font-size: 24px;
+}
 
-/* MOBILE */
+.carousel-indicators {
+  display: flex;
+  gap: 9px;
+  margin-top: 42px;
+}
 
-@media (max-width: 700px) {
+.carousel-indicators button {
+  width: 32px;
+  height: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
 
-  .hero h1 {
-    font-size: 40px;
+.carousel-indicators button.active {
+  background: #f4c47a;
+}
+
+.hero-caption {
+  position: absolute;
+  z-index: 2;
+  right: 40px;
+  bottom: 26px;
+  left: 40px;
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 600px) {
+  .hero-carousel {
+    min-height: 600px;
+    height: 78vh;
   }
 
-  .search-container {
-    flex-direction: column;
-
-    align-items: stretch;
+  .hero-content {
+    padding: 40px 24px;
   }
 
-  .location-field {
-    width: auto;
-
-    border-left: none;
-
-    border-top: 1px solid #e5e7eb;
+  .hero-content h1 {
+    font-size: 48px;
   }
 
-  .search-button {
-    width: 100%;
+  .hero-content p {
+    font-size: 16px;
   }
 
+  .hero-caption {
+    right: 24px;
+    left: 24px;
+    font-size: 8px;
+  }
 }

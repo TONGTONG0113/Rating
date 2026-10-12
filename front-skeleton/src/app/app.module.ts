@@ -16,13 +16,9 @@ import { HomeComponent } from "./home/home.component"
 import { RestaurantComponent } from "./restaurant/restaurant.component"
 import { RestaurantDetailComponent } from "./restaurant-detail/restaurant-detail.component"
 
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    RestaurantComponent,
-    RestaurantDetailComponent,
-  ],
+  declarations: [AppComponent, NavbarComponent, RestaurantComponent, RestaurantDetailComponent, HomeComponent],
 
   imports: [
     BrowserModule,
@@ -33,7 +29,6 @@ import { RestaurantDetailComponent } from "./restaurant-detail/restaurant-detail
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    HomeComponent,
   ],
 
   providers: [],

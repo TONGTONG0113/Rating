@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { Component } from "@angular/core";
 
 @Component({
   selector: "app-navbar",
@@ -11,14 +11,13 @@ export class NavbarComponent {
       name: "Home",
       href: "/",
     },
-
     {
-      name: "Favorite",
-      href: "/favorite",
+      name: "Classement",
+      href: "/restaurant-ranking",
     },
     {
       name: "Users",
       href: "/users",
     },
-  ]
+  ];
 }

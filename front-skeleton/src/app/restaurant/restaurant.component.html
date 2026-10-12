@@ -1,314 +1,100 @@
+
 <div class="restaurant-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">DISCOVER PARIS</p>
+      <h1>Restaurants</h1>
+      <p class="subtitle">Find your next favourite restaurant.</p>
+    </div>
 
-  <!-- Page Header -->
-  <section class="restaurant-header">
+    <div class="restaurant-count">
+      {{ filteredRestaurants.length }} restaurants
+    </div>
+  </header>
 
-    <div class="header-content">
+  <div class="search-bar">
+    <span class="search-icon">⌕</span>
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search by restaurant name or address..."
+      aria-label="Search restaurants"
+    />
+    <button
+      *ngIf="searchTerm"
+      type="button"
+      class="clear-button"
+      (click)="searchTerm = ''"
+    >
+      Clear
+    </button>
+  </div>
 
-      <span class="eyebrow">
-        RESTAURANT REVIEWS
-      </span>
+  <p *ngIf="loading" class="status-message">
+    Loading restaurants...
+  </p>
 
-      <h1>Discover restaurants</h1>
+  <div *ngIf="errorMessage && !loading" class="error-message">
+    {{ errorMessage }}
+    <button type="button" (click)="loadRestaurants()">Retry</button>
+  </div>
 
-      <p>
-        Find the best restaurants, compare ratings
-        and discover new places to eat.
-      </p>
+  <div
+    *ngIf="!loading && !errorMessage && filteredRestaurants.length === 0"
+    class="empty-state"
+  >
+    <h2>No restaurants found</h2>
+    <p>Try another name or address.</p>
+  </div>
 
-      <!-- Search -->
-      <div class="search-box">
-
-        <span class="search-icon">⌕</span>
-
-        <input
-          type="text"
-          [(ngModel)]="searchTerm"
-          placeholder="Search restaurant, cuisine..."
+  <div
+    class="restaurant-grid"
+    *ngIf="!loading && !errorMessage && filteredRestaurants.length > 0"
+  >
+    <article
+      class="restaurant-card"
+      *ngFor="let restaurant of filteredRestaurants"
+    >
+      <div class="image-container">
+        <img
+          *ngIf="!failedImages.has(restaurant.id) && restaurant.imageUrl"
+          [src]="restaurant.imageUrl"
+          [alt]="restaurant.title"
+          class="restaurant-image"
+          loading="lazy"
+          (error)="onImageError(restaurant.id)"
         />
 
-        <span class="location">
-          📍 Paris
-        </span>
-
+        <div
+          *ngIf="failedImages.has(restaurant.id) || !restaurant.imageUrl"
+          class="image-placeholder"
+        >
+          <span class="placeholder-icon">🍽</span>
+          <span>Image unavailable</span>
+        </div>
       </div>
 
-    </div>
+      <div class="restaurant-content">
+        <h2>{{ restaurant.title }}</h2>
 
-  </section>
-
-
-  <!-- Main -->
-  <main class="main-content">
-
-    <!-- Results header -->
-    <div class="results-header">
-
-      <div>
-        <h2>Restaurants</h2>
-
-        <p>
-          {{ filteredRestaurants.length }}
-          restaurants found
+        <p class="restaurant-address">
+          <span class="info-icon">⌖</span>
+          <span>{{ restaurant.address }}</span>
         </p>
+
+        <p class="restaurant-hours">
+          <span class="info-icon">◷</span>
+          <span>Opening hours: {{ restaurant.openingHours }}</span>
+        </p>
+
+        <a
+          class="details-button"
+          [routerLink]="['/restaurants', restaurant.id]"
+        >
+          View restaurant
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
-
-      <button
-        class="reset-button"
-        (click)="resetFilters()"
-      >
-        Reset filters
-      </button>
-
-    </div>
-
-
-    <div class="restaurant-layout">
-
-
-      <!-- FILTERS -->
-      <aside class="filters">
-
-        <div class="filter-title">
-          <h3>Filters</h3>
-        </div>
-
-
-        <!-- Cuisine -->
-        <div class="filter-group">
-
-          <h4>Cuisine</h4>
-
-          <label
-            *ngFor="let category of categories"
-            class="filter-option"
-          >
-
-            <input
-              type="radio"
-              name="category"
-              [value]="category"
-              [(ngModel)]="selectedCategory"
-            />
-
-            <span>
-              {{ category }}
-            </span>
-
-          </label>
-
-        </div>
-
-
-        <!-- Price -->
-        <div class="filter-group">
-
-          <h4>Price</h4>
-
-          <label
-            *ngFor="let price of prices"
-            class="filter-option"
-          >
-
-            <input
-              type="radio"
-              name="price"
-              [value]="price"
-              [(ngModel)]="selectedPrice"
-            />
-
-            <span>
-              {{ price }}
-            </span>
-
-          </label>
-
-        </div>
-
-
-        <!-- Rating -->
-        <div class="filter-group">
-
-          <h4>Minimum rating</h4>
-
-          <label class="filter-option">
-
-            <input
-              type="radio"
-              name="rating"
-              [value]="0"
-              [(ngModel)]="selectedRating"
-            />
-
-            <span>All ratings</span>
-
-          </label>
-
-          <label class="filter-option">
-
-            <input
-              type="radio"
-              name="rating"
-              [value]="4"
-              [(ngModel)]="selectedRating"
-            />
-
-            <span>⭐ 4.0+</span>
-
-          </label>
-
-          <label class="filter-option">
-
-            <input
-              type="radio"
-              name="rating"
-              [value]="4.5"
-              [(ngModel)]="selectedRating"
-            />
-
-            <span>⭐ 4.5+</span>
-
-          </label>
-
-        </div>
-
-      </aside>
-
-
-      <!-- RESTAURANTS -->
-      <section class="restaurant-results">
-
-
-        <!-- Empty -->
-        <div
-          *ngIf="filteredRestaurants.length === 0"
-          class="empty-state"
-        >
-
-          <div class="empty-icon">
-            🍽️
-          </div>
-
-          <h3>No restaurants found</h3>
-
-          <p>
-            Try changing your search or filters.
-          </p>
-
-          <button
-            class="primary-button"
-            (click)="resetFilters()"
-          >
-            Reset filters
-          </button>
-
-        </div>
-
-
-        <!-- Cards -->
-        <div
-          class="restaurant-grid"
-          *ngIf="filteredRestaurants.length > 0"
-        >
-
-          <article
-            class="restaurant-card"
-            *ngFor="let restaurant of filteredRestaurants"
-          >
-
-            <!-- Image -->
-            <div class="card-image">
-
-              <img
-                [src]="restaurant.image"
-                [alt]="restaurant.name"
-              />
-
-              <span class="category-badge">
-                {{ restaurant.category }}
-              </span>
-
-              <button
-                class="favorite-button"
-              >
-                ♡
-              </button>
-
-            </div>
-
-
-            <!-- Content -->
-            <div class="card-content">
-
-              <h3>
-                {{ restaurant.name }}
-              </h3>
-
-
-              <!-- Rating -->
-              <div class="rating">
-
-                <span class="star">
-                  ★
-                </span>
-
-                <strong>
-                  {{ restaurant.rating }}
-                </strong>
-
-                <span class="review-count">
-                  ({{ restaurant.reviews }} reviews)
-                </span>
-
-              </div>
-
-
-              <!-- Info -->
-              <div class="restaurant-info">
-
-                <span>
-                  {{ restaurant.category }}
-                </span>
-
-                <span>
-                  ·
-                </span>
-
-                <span>
-                  {{ restaurant.price }}
-                </span>
-
-              </div>
-
-
-              <div class="address">
-                📍 {{ restaurant.address }}
-              </div>
-
-
-              <p class="description">
-                {{ restaurant.description }}
-              </p>
-
-
-              <button
-                class="details-button"
-                [routerLink]="['/restaurants', restaurant.id]"
-              >
-                View restaurant
-                <span>→</span>
-              </button>
-
-            </div>
-
-          </article>
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
+    </article>
+  </div>
 </div>

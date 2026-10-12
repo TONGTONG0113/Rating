@@ -2,3 +2,11 @@
 # System files
 .DS_Store
 Thumbs.db
+# Maven build output
+back-skeleton/target/
+
+# Angular build output
+front-skeleton/dist/
+
+# Node dependencies
+front-skeleton/node_modules/

@@ -1,6 +1,7 @@
 package com.takima.backskeleton.controllers;
 
 import com.takima.backskeleton.DTO.RestaurantDto;
+import com.takima.backskeleton.DTO.RestaurantRankingDto;
 import com.takima.backskeleton.services.RestaurantService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,5 +26,10 @@ public class RestaurantController {
     @GetMapping("/{id}")
     public RestaurantDto getRestaurantById(@PathVariable Long id) {
         return restaurantService.getRestaurantById(id);
+    }
+
+    @GetMapping("/ranking")
+    public List<RestaurantRankingDto> getRestaurantRanking() {
+        return restaurantService.getRestaurantRanking();
     }
 }

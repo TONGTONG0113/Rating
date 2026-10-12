@@ -2,18 +2,34 @@
 <div class="restaurant-page">
   <section class="restaurant-header">
     <div class="header-content">
-      <span class="eyebrow">RESTAURANT DETAILS</span>
-      <h1>Discover this restaurant</h1>
-      <p>Restaurant information and opening hours.</p>
+      <span class="eyebrow">BON APPÉTIT · PARIS</span>
+      <h1>A little taste of Paris</h1>
+      <p>Discover the place, enjoy the food, share your experience.</p>
+      <span class="header-decoration" aria-hidden="true">✳</span>
     </div>
   </section>
 
   <main class="main-content">
-    <p *ngIf="loading">Loading restaurant...</p>
+    <p *ngIf="loading" class="loading-state">
+      <span class="loading-dot"></span>
+      Loading restaurant...
+    </p>
 
-    <div *ngIf="errorMessage" class="empty-state">
+    <div
+      *ngIf="errorMessage"
+      class="empty-state error-state"
+      role="alert"
+    >
+      <span class="state-icon">!</span>
       <h3>{{ errorMessage }}</h3>
       <p>Please check the restaurant ID and backend connection.</p>
+      <button
+        class="secondary-button"
+        type="button"
+        routerLink="/restaurants"
+      >
+        Back to restaurants
+      </button>
     </div>
 
     <article
@@ -26,19 +42,28 @@
           [src]="restaurant.imageUrl"
           [alt]="restaurant.title"
         />
+
         <div *ngIf="!restaurant.imageUrl" class="image-placeholder">
-          No image available
+          <span class="placeholder-icon">🍽</span>
+          <span>A delicious place to discover</span>
         </div>
+
+        <span class="image-label">YOUR NEXT FOOD SPOT</span>
       </div>
 
       <div class="card-content">
         <div class="title-row">
-          <h2>{{ restaurant.title }}</h2>
+          <div>
+            <span class="section-kicker">THE RESTAURANT</span>
+            <h2>{{ restaurant.title }}</h2>
+          </div>
 
           <button
             class="favorite"
             type="button"
-            aria-label="Favorite"
+            aria-label="Toggle favorite"
+            [attr.aria-pressed]="isFavorite"
+            [class.is-favorite]="isFavorite"
             (click)="toggleFavorite()"
           >
             {{ isFavorite ? '♥' : '♡' }}
@@ -48,107 +73,230 @@
         <div class="rating" *ngIf="restaurant.rating != null">
           <span class="star">★</span>
           <strong>{{ restaurant.rating }}</strong>
+          <span class="rating-separator">·</span>
           <span>{{ reviews.length }} reviews</span>
         </div>
 
-        <p class="address">📍 {{ restaurant.address }}</p>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-icon">⌖</span>
+            <div>
+              <span class="info-label">ADDRESS</span>
+              <p>{{ restaurant.address || 'Address not available' }}</p>
+            </div>
+          </div>
 
-        <p>
-          <strong>Opening hours:</strong>
-          {{ restaurant.openingHours }}
-        </p>
+          <div class="info-item">
+            <span class="info-icon">◷</span>
+            <div>
+              <span class="info-label">OPENING HOURS</span>
+              <p>
+                {{ restaurant.openingHours || 'Hours not available' }}
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <section class="content-section" *ngIf="restaurant.description">
-          <h3>About</h3>
+        <section
+          class="about-section"
+          *ngIf="restaurant.description"
+        >
+          <span class="section-kicker">A LITTLE MORE</span>
+          <h3>About this place</h3>
           <p>{{ restaurant.description }}</p>
         </section>
 
         <button
-          class="details-button"
+          class="secondary-button back-button"
           type="button"
           routerLink="/restaurants"
         >
-          ← Back to restaurants
+          <span aria-hidden="true">←</span>
+          Back to restaurants
         </button>
       </div>
     </article>
 
     <section
-      class="content-section reviews-section"
+      class="reviews-section"
       *ngIf="!loading && restaurant"
     >
-      <div class="reviews-header">
-        <h2>Customer reviews ({{ reviews.length }})</h2>
+      <div class="reviews-heading">
+        <div>
+          <span class="section-kicker">THE WORD ON THE STREET</span>
+          <h2>Made by guests, shared with love <span>♥</span></h2>
+          <p class="reviews-subtitle">
+            Honest thoughts from people who have been here.
+          </p>
+        </div>
 
         <button
           class="review-button"
           type="button"
           (click)="openReviewForm()"
+          [disabled]="submittingReview"
         >
+          <span aria-hidden="true">＋</span>
           Write a review
         </button>
       </div>
 
-      <p
+      <div
         *ngIf="submitMessage"
+        class="feedback-message"
         role="status"
         [class.error-message]="submitMessageIsError"
         [class.success-message]="!submitMessageIsError"
       >
+        <span>{{ submitMessageIsError ? '!' : '✓' }}</span>
         {{ submitMessage }}
-      </p>
+      </div>
 
       <form
         class="review-form"
         *ngIf="showReviewForm"
         (ngSubmit)="submitReview()"
       >
-        <h3>Write your review</h3>
+        <div class="form-heading">
+          <span class="form-icon">✎</span>
+          <div>
+            <span class="section-kicker">YOUR EXPERIENCE MATTERS</span>
+            <h3>Write your review</h3>
+            <p>Tell others what made this place special.</p>
+          </div>
+        </div>
 
-        <label for="reviewRating">Rating</label>
-        <select
-          id="reviewRating"
-          name="reviewRating"
-          [(ngModel)]="reviewRating"
-          required
-        >
-          <option [ngValue]="5">5 - Excellent</option>
-          <option [ngValue]="4">4 - Very good</option>
-          <option [ngValue]="3">3 - Good</option>
-          <option [ngValue]="2">2 - Fair</option>
-          <option [ngValue]="1">1 - Poor</option>
-        </select>
+        <!-- Searchable user selector -->
+        <div class="form-field">
+          <label for="reviewUser">
+            Who is writing this review?
+          </label>
 
-        <label for="reviewSummary">Title</label>
-        <input
-          id="reviewSummary"
-          name="reviewSummary"
-          type="text"
-          [(ngModel)]="reviewSummary"
-          placeholder="Summarize your experience"
-          maxlength="150"
-          required
-        />
+          <input
+            id="reviewUser"
+            name="reviewUser"
+            type="text"
+            list="reviewUserList"
+            [(ngModel)]="reviewUserSearch"
+            (ngModelChange)="onReviewUserSearchChange($event)"
+            [disabled]="usersLoading || submittingReview"
+            placeholder="Type a name or choose a user..."
+            autocomplete="off"
+            required
+          />
 
-        <label for="reviewDetails">Comment (optional)</label>
-        <textarea
-          id="reviewDetails"
-          name="reviewDetails"
-          [(ngModel)]="reviewDetails"
-          placeholder="Tell us more about your experience"
-          rows="4"
-        ></textarea>
+          <datalist id="reviewUserList">
+            <option
+              *ngFor="let user of activeUsers"
+              [value]="getUserOptionLabel(user)"
+            ></option>
+          </datalist>
+
+          <small *ngIf="usersLoading" class="field-hint">
+            Loading users from the database...
+          </small>
+
+          <small
+            *ngIf="!usersLoading && usersError"
+            class="field-error"
+          >
+            {{ usersError }}
+          </small>
+
+          <small
+            *ngIf="
+              !usersLoading &&
+              !usersError &&
+              activeUsers.length === 0
+            "
+            class="field-error"
+          >
+            No active users are available. Please check the Users page.
+          </small>
+
+          <small
+            *ngIf="
+              !usersLoading &&
+              !usersError &&
+              reviewUserSearch.trim().length > 0 &&
+              reviewUserId === null
+            "
+            class="field-hint"
+          >
+            Please choose a user from the suggestions.
+          </small>
+
+          <small
+            *ngIf="reviewUserId !== null"
+            class="field-hint"
+          >
+            Selected user ID: {{ reviewUserId }}
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="reviewRating">Your rating</label>
+          <select
+            id="reviewRating"
+            name="reviewRating"
+            [(ngModel)]="reviewRating"
+            [disabled]="submittingReview"
+            required
+          >
+            <option [ngValue]="5">★★★★★ — Excellent</option>
+            <option [ngValue]="4">★★★★ — Very good</option>
+            <option [ngValue]="3">★★★ — Good</option>
+            <option [ngValue]="2">★★ — Fair</option>
+            <option [ngValue]="1">★ — Poor</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="reviewSummary">Review title</label>
+          <input
+            id="reviewSummary"
+            name="reviewSummary"
+            type="text"
+            [(ngModel)]="reviewSummary"
+            placeholder="Give your experience a title"
+            maxlength="150"
+            [disabled]="submittingReview"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="reviewDetails">
+            Your comments <span>(optional)</span>
+          </label>
+          <textarea
+            id="reviewDetails"
+            name="reviewDetails"
+            [(ngModel)]="reviewDetails"
+            placeholder="How was the food, atmosphere, or service?"
+            rows="4"
+            [disabled]="submittingReview"
+          ></textarea>
+        </div>
 
         <div class="review-form-actions">
           <button
             class="review-button"
             type="submit"
-            [disabled]="submittingReview"
+            [disabled]="
+              submittingReview ||
+              usersLoading ||
+              activeUsers.length === 0
+            "
           >
             {{ submittingReview ? 'Publishing...' : 'Publish review' }}
+            <span *ngIf="!submittingReview" aria-hidden="true">
+              →
+            </span>
           </button>
 
           <button
+            class="cancel-button"
             type="button"
             (click)="cancelReviewForm()"
             [disabled]="submittingReview"
@@ -158,35 +306,89 @@
         </div>
       </form>
 
-      <p *ngIf="reviewsLoading">Loading reviews...</p>
+      <div *ngIf="reviewsLoading" class="loading-state">
+        <span class="loading-dot"></span>
+        Loading reviews...
+      </div>
 
-      <p
+      <div
         *ngIf="!reviewsLoading && reviewsError"
+        class="empty-state error-state"
         role="alert"
       >
-        {{ reviewsError }}
-      </p>
+        <h3>We couldn't load the reviews</h3>
+        <p>{{ reviewsError }}</p>
+      </div>
 
-      <p
-        *ngIf="!reviewsLoading && !reviewsError && reviews.length === 0"
+      <div
+        *ngIf="
+          !reviewsLoading &&
+          !reviewsError &&
+          reviews.length === 0
+        "
+        class="empty-state"
       >
-        No reviews yet for this restaurant.
-      </p>
+        <span class="empty-illustration">☕</span>
+        <h3>Be the first to share!</h3>
+        <p>
+          No reviews yet. Your experience could help someone find
+          their new favorite place.
+        </p>
+        <button
+          class="text-button"
+          type="button"
+          (click)="openReviewForm()"
+        >
+          Leave the first review →
+        </button>
+      </div>
 
-      <div class="review" *ngFor="let review of reviews">
-        <div class="review-top">
-          <strong>{{ review.userName || 'User' }}</strong>
-          <span class="star">★ {{ review.rating }}/5</span>
-        </div>
+      <div
+        class="review-list"
+        *ngIf="
+          !reviewsLoading &&
+          !reviewsError &&
+          reviews.length > 0
+        "
+      >
+        <article
+          class="review-card"
+          *ngFor="let review of reviews"
+        >
+          <div class="review-top">
+            <div class="review-author">
+              <span class="author-avatar">
+                {{ (review.userName || 'U').charAt(0).toUpperCase() }}
+              </span>
 
-        <h3>{{ review.summary }}</h3>
+              <div>
+                <strong>{{ review.userName || 'User' }}</strong>
+                <small *ngIf="review.createdAt">
+                  {{ review.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </small>
+              </div>
+            </div>
 
-        <p *ngIf="review.details">{{ review.details }}</p>
+            <span class="review-rating">
+              <span class="star">★</span>
+              {{ review.rating }}/5
+            </span>
+          </div>
 
-        <small *ngIf="review.createdAt">
-          {{ review.createdAt | date: 'dd/MM/yyyy HH:mm' }}
-        </small>
+          <h3>{{ review.summary }}</h3>
+
+          <p class="review-details" *ngIf="review.details">
+            {{ review.details }}
+          </p>
+        </article>
       </div>
     </section>
   </main>
+
+  <footer class="page-footer">
+    <span>
+      Made with <span class="footer-heart">♥</span>
+      and a little appetite for Paris.
+    </span>
+  </footer>
 </div>

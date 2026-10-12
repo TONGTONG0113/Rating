@@ -1,4 +1,3 @@
-
 package com.takima.backskeleton.DTO;
 
 public class RestaurantDto {
@@ -8,6 +7,13 @@ public class RestaurantDto {
     private String address;
     private String openingHours;
     private String imageUrl;
+
+    private String cuisine;
+
+    // These values are derived from reviews and are not stored
+    // directly in the restaurants table.
+    private Double averageRating;
+    private Long reviewCount;
 
     public RestaurantDto() {
     }
@@ -32,6 +38,18 @@ public class RestaurantDto {
         return imageUrl;
     }
 
+    public String getCuisine() {
+        return cuisine;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public Long getReviewCount() {
+        return reviewCount;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -52,12 +70,28 @@ public class RestaurantDto {
         this.imageUrl = imageUrl;
     }
 
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public void setReviewCount(Long reviewCount) {
+        this.reviewCount = reviewCount;
+    }
+
     public static final class RestaurantDtoBuilder {
+
         private Long id;
         private String title;
         private String address;
         private String openingHours;
         private String imageUrl;
+        private String cuisine;
+        private Double averageRating;
+        private Long reviewCount;
 
         public RestaurantDtoBuilder id(Long id) {
             this.id = id;
@@ -84,13 +118,33 @@ public class RestaurantDto {
             return this;
         }
 
+        public RestaurantDtoBuilder cuisine(String cuisine) {
+            this.cuisine = cuisine;
+            return this;
+        }
+
+        public RestaurantDtoBuilder averageRating(Double averageRating) {
+            this.averageRating = averageRating;
+            return this;
+        }
+
+        public RestaurantDtoBuilder reviewCount(Long reviewCount) {
+            this.reviewCount = reviewCount;
+            return this;
+        }
+
         public RestaurantDto build() {
             RestaurantDto dto = new RestaurantDto();
+
             dto.id = this.id;
             dto.title = this.title;
             dto.address = this.address;
             dto.openingHours = this.openingHours;
             dto.imageUrl = this.imageUrl;
+            dto.cuisine = this.cuisine;
+            dto.averageRating = this.averageRating;
+            dto.reviewCount = this.reviewCount;
+
             return dto;
         }
     }

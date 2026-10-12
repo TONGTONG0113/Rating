@@ -4,7 +4,8 @@ CREATE TABLE restaurants
     title TEXT NOT NULL,
     address TEXT NOT NULL,
     opening_hours TEXT NOT NULL,
-    image_url TEXT
+    image_url TEXT,
+    cuisine TEXT NOT NULL DEFAULT 'Other'
 );
 
 CREATE TABLE app_users

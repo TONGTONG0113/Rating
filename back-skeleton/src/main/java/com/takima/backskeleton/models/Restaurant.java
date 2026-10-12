@@ -17,6 +17,11 @@ public class Restaurant {
     @Column(name = "opening_hours")
     private String openingHours;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    private String cuisine;
+
     public Restaurant() {
     }
 
@@ -52,10 +57,6 @@ public class Restaurant {
         this.openingHours = openingHours;
     }
 
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -64,4 +65,11 @@ public class Restaurant {
         this.imageUrl = imageUrl;
     }
 
+    public String getCuisine() {
+        return cuisine;
+    }
+
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
+    }
 }

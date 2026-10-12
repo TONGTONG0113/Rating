@@ -3,7 +3,9 @@ import { ActivatedRoute } from "@angular/router"
 import { HttpClient } from "@angular/common/http"
 
 import { ReviewService } from "../services/review.service"
+import { UserService } from "../services/user.service"
 import { Review } from "../models/review.model"
+import { User } from "../models/user.model"
 
 interface Restaurant {
   id: number
@@ -11,9 +13,6 @@ interface Restaurant {
   address: string
   openingHours: string
   imageUrl: string | null
-
-  // Optional fields for additional detail-page information.
-  // The backend may not provide these fields.
   rating?: number
   description?: string
 }
@@ -34,24 +33,39 @@ export class RestaurantDetailComponent implements OnInit {
   reviewsLoading = false
   reviewsError = ""
 
+  users: User[] = []
+  usersLoading = false
+  usersError = ""
+
   reviewRating = 5
   reviewSummary = ""
   reviewDetails = ""
 
-  // Temporary test account. Replace with the logged-in user later.
-  reviewUserId = 1
+  reviewUserId: number | null = null
+  reviewUserSearch = ""
 
   showReviewForm = false
   submittingReview = false
   submitMessage = ""
   submitMessageIsError = false
 
-  // Local UI state only; this does not persist favorites to the backend.
+  // Local UI state only; favorites are not saved to the backend.
   isFavorite = false
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private reviewService: ReviewService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private reviewService: ReviewService,
+    private userService: UserService,
+  ) {}
+
+  get activeUsers(): User[] {
+    return this.users.filter((user) => user.id !== undefined && user.active !== false)
+  }
 
   ngOnInit(): void {
+    this.loadUsers()
+
     this.route.params.subscribe((params) => {
       const id = Number(params["id"])
 
@@ -61,6 +75,7 @@ export class RestaurantDetailComponent implements OnInit {
       this.errorMessage = ""
       this.reviewsError = ""
       this.submitMessage = ""
+      this.showReviewForm = false
       this.loading = true
 
       if (!Number.isInteger(id) || id <= 0) {
@@ -81,6 +96,29 @@ export class RestaurantDetailComponent implements OnInit {
           this.loading = false
         },
       })
+    })
+  }
+
+  private loadUsers(): void {
+    this.usersLoading = true
+    this.usersError = ""
+
+    this.userService.getAll().subscribe({
+      next: (users) => {
+        this.users = users
+        this.usersLoading = false
+
+        if (this.reviewUserId !== null && !this.activeUsers.some((user) => user.id === this.reviewUserId)) {
+          this.reviewUserId = null
+          this.reviewUserSearch = ""
+        }
+      },
+      error: (error) => {
+        console.error("Failed to load users:", error)
+        this.users = []
+        this.usersLoading = false
+        this.usersError = "Unable to load users. Please try again later."
+      },
     })
   }
 
@@ -113,6 +151,10 @@ export class RestaurantDetailComponent implements OnInit {
     this.showReviewForm = true
     this.submitMessage = ""
     this.submitMessageIsError = false
+
+    if (!this.usersLoading && this.users.length === 0) {
+      this.loadUsers()
+    }
   }
 
   cancelReviewForm(): void {
@@ -121,9 +163,41 @@ export class RestaurantDetailComponent implements OnInit {
     this.submitMessageIsError = false
   }
 
+  /**
+   * Called whenever the user types in the searchable user input.
+   * Only an exact match with a listed active user selects a user ID.
+   */
+  onReviewUserSearchChange(value: string): void {
+    this.reviewUserSearch = value
+
+    const selectedUser = this.activeUsers.find((user) => this.getUserOptionLabel(user) === value)
+
+    this.reviewUserId = selectedUser?.id ?? null
+  }
+
+  getUserOptionLabel(user: User): string {
+    return `${user.name} (ID: ${user.id})`
+  }
+
   submitReview(): void {
     const summary = this.reviewSummary.trim()
     const details = this.reviewDetails.trim()
+
+    if (this.reviewUserId === null) {
+      this.submitMessage = "Please choose a valid user from the suggestions."
+      this.submitMessageIsError = true
+      return
+    }
+
+    const selectedUser = this.activeUsers.find((user) => user.id === this.reviewUserId)
+
+    if (!selectedUser || selectedUser.id === undefined) {
+      this.submitMessage = "Please select a valid, active user."
+      this.submitMessageIsError = true
+      this.reviewUserId = null
+      this.reviewUserSearch = ""
+      return
+    }
 
     if (!summary) {
       this.submitMessage = "Please enter a review title."
@@ -151,17 +225,27 @@ export class RestaurantDetailComponent implements OnInit {
       rating: this.reviewRating,
       summary,
       details: details || undefined,
-      userId: this.reviewUserId,
+      userId: selectedUser.id,
       restaurantId: this.restaurantId,
     }
 
     this.reviewService.create(newReview).subscribe({
       next: (createdReview) => {
-        this.reviews = [createdReview, ...this.reviews]
+        const reviewToDisplay: Review = {
+          ...createdReview,
+          userId: createdReview.userId ?? selectedUser.id!,
+          userName: createdReview.userName || selectedUser.name,
+          restaurantId: createdReview.restaurantId ?? this.restaurantId!,
+          restaurantTitle: createdReview.restaurantTitle || this.restaurant?.title,
+        }
+
+        this.reviews = [reviewToDisplay, ...this.reviews]
 
         this.reviewSummary = ""
         this.reviewDetails = ""
         this.reviewRating = 5
+        this.reviewUserId = null
+        this.reviewUserSearch = ""
 
         this.submittingReview = false
         this.showReviewForm = false

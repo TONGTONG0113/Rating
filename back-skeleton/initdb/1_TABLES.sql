@@ -3,7 +3,8 @@ CREATE TABLE restaurants
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     address TEXT NOT NULL,
-    opening_hours TEXT NOT NULL
+    opening_hours TEXT NOT NULL,
+    image_url TEXT
 );
 
 CREATE TABLE app_users

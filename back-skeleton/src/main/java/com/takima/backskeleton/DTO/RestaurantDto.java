@@ -1,10 +1,20 @@
+
 package com.takima.backskeleton.DTO;
 
 public class RestaurantDto {
 
+    private Long id;
     private String title;
     private String address;
     private String openingHours;
+    private String imageUrl;
+
+    public RestaurantDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;
@@ -18,16 +28,40 @@ public class RestaurantDto {
         return openingHours;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setOpeningHours(String openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public static final class RestaurantDtoBuilder {
+        private Long id;
         private String title;
         private String address;
         private String openingHours;
+        private String imageUrl;
 
-        public RestaurantDtoBuilder() {
-        }
-
-        public static RestaurantDtoBuilder aRestaurantDto() {
-            return new RestaurantDtoBuilder();
+        public RestaurantDtoBuilder id(Long id) {
+            this.id = id;
+            return this;
         }
 
         public RestaurantDtoBuilder title(String title) {
@@ -45,12 +79,19 @@ public class RestaurantDto {
             return this;
         }
 
+        public RestaurantDtoBuilder imageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
         public RestaurantDto build() {
-            RestaurantDto restaurantDto = new RestaurantDto();
-            restaurantDto.title = this.title;
-            restaurantDto.address = this.address;
-            restaurantDto.openingHours = this.openingHours;
-            return restaurantDto;
+            RestaurantDto dto = new RestaurantDto();
+            dto.id = this.id;
+            dto.title = this.title;
+            dto.address = this.address;
+            dto.openingHours = this.openingHours;
+            dto.imageUrl = this.imageUrl;
+            return dto;
         }
     }
 }

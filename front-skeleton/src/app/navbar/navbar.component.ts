@@ -16,8 +16,8 @@ export class NavbarComponent {
       href: "/restaurant-ranking",
     },
     {
-      name: "Users",
+      name: "Management",
       href: "/users",
     },
-  ];
+  ]
 }

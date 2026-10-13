@@ -4,7 +4,7 @@
 
 Rating est une application web permettant aux utilisateurs de découvrir des restaurants de paris, de consulter leurs informations et de visualiser les avis et les classements des restaurants.
 
-## 2. Fonctionnalités fond
+## 2. Fonctionnalités principales
 
 ### Gestion des restaurants
 - Afficher la liste des restaurants.
@@ -14,8 +14,10 @@ Rating est une application web permettant aux utilisateurs de découvrir des res
 - Supprimer un restaurant.
 - Consulter le classement des restaurants.
 
-### Gestion des avis et des notes(cette fonctionnalité affiche dans usermanagement→rewiew)
-- Gérer les avis des restaurants.
+### Gestion des avis et des notes
+- Consulter les avis associés aux utilisateurs.
+- Ajouter un avis avec une note, un résumé et un commentaire détaillé optionnel.
+- Supprimer un avis depuis l'espace de gestion.
 
 ### Gestion des utilisateurs
 - Afficher la liste des utilisateurs.
@@ -26,7 +28,7 @@ Rating est une application web permettant aux utilisateurs de découvrir des res
 
 ### Classement
 - Afficher la note moyenne et le nombre d'avis associés à chaque restaurant.
-- cliquer le nom de resto on peut aller directement dans la page détail de resto.
+- Cliquer sur une ligne du classement permet d'accéder directement à la page de détail du restaurant correspondant.
   
 ### page d'accueil
 - Affiche tous les restaurants, et classés par type de cuisine (par ex. chinois, français).
@@ -78,9 +80,11 @@ Les clés étrangères permettent d'établir les relations entre les tables conc
 
 ### Initialisation de la base de données
 
-Les scripts d'initialisation de la base de données sont fournis dans le dépôt du projet.
+Les scripts SQL d'initialisation sont disponibles dans le dossier `back-skeleton/initdb/`.
 
-Avant de lancer l'application, exécutez les scripts dans l'ordre indiqué dans la documentation du projet.
+Lors de la première création du conteneur PostgreSQL, Docker exécute automatiquement ces scripts afin de créer les tables et d'insérer les données initiales.
+
+Ces scripts sont exécutés uniquement lors de l'initialisation d'un nouveau volume PostgreSQL.
 
 ## 6. Prérequis
 
@@ -145,37 +149,85 @@ Préfixe de l'API : `/api`
 
 ## 10. Tests
 
-Le backend utilise JUnit 5 et Mockito pour les tests unitaires.
+Le backend utilise JUnit 5, Mockito, Spring Boot Test et MockMvc afin de vérifier le bon fonctionnement de l'application.
 
-Spring Boot Test et MockMvc permettent également de tester les endpoints HTTP.
+### Tests unitaires
+
+- `AppRestaurantServiceTest`
+- `AppUserServiceTest`
+- `ReviewServiceTest`
+
+### Tests d'intégration
+
+- `AppRestaurantTest`
+- `AppUserIntegrationTest`
+
+### Test de démarrage
+
+- `BackSkeletonApplicationTests`
 
 ### Exécuter tous les tests du backend
 
 Depuis le répertoire du backend :
 
 ```bash
-mvn test
+mvn clean test
 ```
 
-### Exécuter les tests du service Restaurant
+Il est également possible d'exécuter un test spécifique :
 
 ```bash
 mvn -Dtest=AppRestaurantServiceTest test
-```
-
-### Exécuter les tests d'intégration Restaurant
-
-```bash
 mvn -Dtest=AppRestaurantTest test
+mvn -Dtest=AppUserServiceTest test
+mvn -Dtest=AppUserIntegrationTest test
+mvn -Dtest=ReviewServiceTest test
 ```
 
-Les tests doivent être exécutés avant la remise du projet.
+Les tests doivent être exécutés avant la remise du projet afin de vérifier que les principales fonctionnalités du backend fonctionnent correctement.
 
 
-## 11. Skill
-Présenter ici:
+## 11. Skill — Recommandation de restaurants
 
-<img width="268" height="69" alt="image" src="https://github.com/user-attachments/assets/4324385f-d73d-4d1e-9b56-9d23aa9b0146" />
+L'application intègre un **Restaurant Recommendation Skill** permettant de proposer des restaurants selon les préférences de l'utilisateur.
+
+L'utilisateur peut sélectionner :
+
+- un type de cuisine ;
+- une note moyenne minimale ;
+- le nombre de résultats souhaités.
+
+Le système utilise les données réelles enregistrées dans l'application.
+
+Le processus de recommandation est le suivant :
+
+1. Filtrer les restaurants selon le type de cuisine demandé.
+2. Éliminer les restaurants qui ne respectent pas la note minimale.
+3. Trier les restaurants selon leur note moyenne.
+4. En cas d'égalité, privilégier le restaurant ayant le plus grand nombre d'avis.
+5. Retourner le nombre de résultats demandé.
+
+L'API correspondante est :
+
+```http
+GET /api/skills/restaurants/recommend
+```
+
+Exemple :
+
+```http
+GET /api/skills/restaurants/recommend?cuisine=Italian&minRating=4&limit=3
+```
+
+Le frontend propose un bouton **Recommend for me** permettant d'utiliser cette fonctionnalité directement depuis la page des restaurants.
+
+La documentation détaillée du Skill est disponible dans :
+
+```text
+back-skeleton/skills/restaurant-recommendation/SKILL.md
+```
+
+<img width="268" height="69" alt="Restaurant Recommendation Skill" src="https://github.com/user-attachments/assets/4324385f-d73d-4d1e-9b56-9d23aa9b0146" />
 
 
 ## 12. Utilisation de l'intelligence artificielle
@@ -226,7 +278,6 @@ ChatGPT a été un outil d'assistance important pendant le développement de not
 
 Cependant, son utilisation ne remplace ni la compréhension du code, ni les tests, ni la validation des choix techniques par l'équipe. Nous restons responsables des fonctionnalités livrées et de leur bon fonctionnement.
 
-À l'avenir, nous souhaitons également explorer une intégration directe de l'intelligence artificielle dans l'application. Nous envisageons notamment un assistant conversationnel capable de recommander des restaurants selon les préférences des utilisateurs, leur budget ou le nombre de personnes, ainsi qu'un système de recherche en langage naturel permettant d'obtenir des informations sur un restaurant, telles que son adresse, sa note moyenne et le nombre d'avis disponibles.
-
+À l'avenir, nous souhaitons enrichir le système de recommandation déjà présent dans l'application en ajoutant une interface conversationnelle et une recherche en langage naturel. L'utilisateur pourrait ainsi formuler directement des demandes telles que « recommande-moi un restaurant italien bien noté » ou demander des informations sur un restaurant, telles que son adresse, sa note moyenne ou le nombre d'avis disponibles.
 
 

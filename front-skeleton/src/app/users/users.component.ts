@@ -11,11 +11,11 @@ import { ReviewService } from "../services/review.service"
 type SortField = "id" | "name" | "email" | "createdAt"
 
 type StatusFilter = "all" | "active" | "disabled"
-
+import { RestaurantManagementComponent } from "../restaurant-management/restaurant-management.component"
 @Component({
   selector: "app-users",
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RestaurantManagementComponent],
   templateUrl: "./users.component.html",
   styleUrls: ["./users.component.scss"],
 })

@@ -20,7 +20,6 @@
 
     </div>
 
-
     <div
       class="intro-decoration"
       aria-hidden="true"
@@ -58,7 +57,6 @@
 
       </div>
 
-
       <div class="result-count">
 
         <strong>
@@ -78,42 +76,289 @@
     </div>
 
 
-    <!-- Search -->
+    <!-- Search + Recommendation Skill -->
 
-    <div class="search-bar">
+    <div class="search-actions">
 
-      <svg
-        class="search-icon"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
-      >
-        <circle
-          cx="10.8"
-          cy="10.8"
-          r="6.8"
-        ></circle>
+      <div class="search-bar">
 
-        <path d="m16 16 4.5 4.5"></path>
-      </svg>
+        <svg
+          class="search-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle
+            cx="10.8"
+            cy="10.8"
+            r="6.8"
+          ></circle>
 
+          <path d="m16 16 4.5 4.5"></path>
+        </svg>
 
-      <input
-        type="text"
-        [(ngModel)]="searchTerm"
-        placeholder="Search by restaurant name or address..."
-        aria-label="Search restaurants"
-      />
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search by restaurant name or address..."
+          aria-label="Search restaurants"
+        />
+
+        <button
+          *ngIf="searchTerm"
+          type="button"
+          class="clear-button"
+          (click)="searchTerm = ''"
+        >
+          Clear
+        </button>
+
+      </div>
 
 
       <button
-        *ngIf="searchTerm"
         type="button"
-        class="clear-button"
-        (click)="searchTerm = ''"
+        class="recommend-button"
+        (click)="openRecommendation()"
       >
-        Clear
+        ✦ Recommend for me
       </button>
+
+    </div>
+
+
+    <!-- Restaurant Recommendation Skill Modal -->
+
+    <div
+      *ngIf="recommendationOpen"
+      class="recommendation-backdrop"
+      (click)="onRecommendationBackdropClick($event)"
+    >
+
+      <section
+        class="recommendation-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="recommendation-title"
+      >
+
+        <div class="recommendation-header">
+
+          <div>
+
+            <span class="eyebrow">
+              SMART DISCOVERY
+            </span>
+
+            <h3 id="recommendation-title">
+              Restaurant Recommendation
+            </h3>
+
+            <p>
+              Choose your preferences and let our recommendation skill
+              find the best matching restaurants.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="modal-close"
+            aria-label="Close recommendation"
+            (click)="closeRecommendation()"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <div class="recommendation-fields">
+
+          <label>
+
+            <span>
+              Cuisine
+            </span>
+
+            <select
+              [(ngModel)]="recommendationCuisine"
+            >
+
+              <option
+                *ngFor="let cuisine of cuisines"
+                [value]="cuisine"
+              >
+                {{ cuisine }}
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <label>
+
+            <span>
+              Minimum rating
+            </span>
+
+            <select
+              [(ngModel)]="recommendationMinRating"
+            >
+
+              <option
+                *ngFor="let rating of ratingOptions"
+                [ngValue]="rating"
+              >
+                {{
+                  rating === 0
+                    ? 'Any rating'
+                    : rating + '+ stars'
+                }}
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <label>
+
+            <span>
+              Results
+            </span>
+
+            <select
+              [(ngModel)]="recommendationLimit"
+            >
+
+              <option
+                *ngFor="let amount of resultOptions"
+                [ngValue]="amount"
+              >
+                {{ amount }}
+              </option>
+
+            </select>
+
+          </label>
+
+        </div>
+
+
+        <div class="recommendation-actions">
+
+          <button
+            type="button"
+            class="modal-cancel"
+            (click)="closeRecommendation()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="modal-recommend"
+            [disabled]="recommendationLoading"
+            (click)="recommendRestaurants()"
+          >
+            {{
+              recommendationLoading
+                ? 'Finding restaurants...'
+                : '✦ Recommend'
+            }}
+          </button>
+
+        </div>
+
+
+        <div
+          *ngIf="recommendationError"
+          class="recommendation-message recommendation-error"
+        >
+          {{ recommendationError }}
+        </div>
+
+
+        <div
+          *ngIf="
+            recommendationSearched &&
+            !recommendationLoading &&
+            !recommendationError
+          "
+          class="recommendation-results"
+        >
+
+          <h4>
+            Recommended for you
+          </h4>
+
+
+          <div
+            *ngIf="recommendations.length === 0"
+            class="recommendation-message"
+          >
+            No restaurant matches these preferences.
+            Try another cuisine or a lower minimum rating.
+          </div>
+
+
+          <a
+            *ngFor="let restaurant of recommendations"
+            class="recommendation-result"
+            [routerLink]="[
+              '/restaurants',
+              restaurant.id
+            ]"
+            (click)="closeRecommendation()"
+          >
+
+            <img
+              *ngIf="restaurant.imageUrl"
+              [src]="restaurant.imageUrl"
+              [alt]="restaurant.title"
+            />
+
+
+            <div class="recommendation-result-copy">
+
+              <strong>
+                {{ restaurant.title }}
+              </strong>
+
+              <span>
+                {{ restaurant.cuisine }}
+              </span>
+
+              <span>
+                ★
+                {{
+                  restaurant.averageRating
+                    | number: '1.1-1'
+                }}
+                ·
+                {{ restaurant.reviewCount }}
+                {{
+                  restaurant.reviewCount === 1
+                    ? 'review'
+                    : 'reviews'
+                }}
+              </span>
+
+            </div>
+
+
+            <span class="recommendation-arrow">
+              ↗
+            </span>
+
+          </a>
+
+        </div>
+
+      </section>
 
     </div>
 

@@ -861,6 +861,310 @@
 }
 
 
+/* RECOMMENDATION SKILL */
+
+.search-actions {
+  display: flex;
+
+  align-items: stretch;
+
+  gap: 12px;
+}
+
+.search-actions .search-bar {
+  flex: 1;
+
+  max-width: none;
+}
+
+.recommend-button,
+.modal-recommend {
+  border: 0;
+  border-radius: 10px;
+
+  background: #496854;
+  color: #ffffff;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.recommend-button {
+  min-height: 54px;
+
+  padding: 0 20px;
+
+  white-space: nowrap;
+}
+
+.recommend-button:hover,
+.modal-recommend:hover:not(:disabled) {
+  background: #354f3e;
+}
+
+.recommendation-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 20px;
+
+  background:
+    rgb(25 34 29 / 58%);
+}
+
+.recommendation-modal {
+  width: min(720px, 100%);
+
+  max-height:
+    calc(100vh - 40px);
+
+  overflow: auto;
+
+  padding: 26px;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 24px 70px
+    rgb(20 30 24 / 25%);
+}
+
+.recommendation-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.recommendation-header .eyebrow {
+  margin-bottom: 7px;
+}
+
+.recommendation-header h3,
+.recommendation-results h4 {
+  margin: 0;
+
+  color: #26312b;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+}
+
+.recommendation-header h3 {
+  font-size: 25px;
+}
+
+.recommendation-header p {
+  margin:
+    8px 0 0;
+
+  color: #747d77;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.modal-close {
+  align-self: flex-start;
+
+  border: 0;
+
+  background: transparent;
+  color: #5e6762;
+
+  font-size: 28px;
+
+  cursor: pointer;
+}
+
+.recommendation-fields {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr 0.7fr;
+
+  gap: 14px;
+
+  margin-top: 22px;
+}
+
+.recommendation-fields label {
+  display: grid;
+
+  gap: 7px;
+
+  color: #56625b;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.recommendation-fields select {
+  height: 43px;
+
+  padding: 0 11px;
+
+  border: 1px solid #dfe3de;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #28312d;
+}
+
+.recommendation-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+.modal-cancel,
+.modal-recommend {
+  min-height: 42px;
+
+  padding: 0 17px;
+}
+
+.modal-cancel {
+  border:
+    1px solid #dfe3de;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #55615a;
+
+  cursor: pointer;
+}
+
+.modal-recommend:disabled {
+  opacity: 0.65;
+
+  cursor: wait;
+}
+
+.recommendation-results {
+  display: grid;
+
+  gap: 9px;
+
+  margin-top: 22px;
+
+  padding-top: 20px;
+
+  border-top:
+    1px solid #eceeea;
+}
+
+.recommendation-results h4 {
+  margin-bottom: 3px;
+
+  font-size: 19px;
+}
+
+.recommendation-result {
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 9px;
+
+  border:
+    1px solid #e4e7e2;
+
+  border-radius: 10px;
+
+  color: inherit;
+
+  text-decoration: none;
+}
+
+.recommendation-result:hover {
+  border-color: #aebcaf;
+
+  background: #fafbf9;
+}
+
+.recommendation-result img {
+  width: 88px;
+  height: 64px;
+
+  flex: 0 0 88px;
+
+  border-radius: 7px;
+
+  object-fit: cover;
+}
+
+.recommendation-result-copy {
+  display: grid;
+
+  min-width: 0;
+
+  gap: 3px;
+
+  color: #747d77;
+
+  font-size: 12px;
+}
+
+.recommendation-result-copy strong {
+  overflow: hidden;
+
+  color: #29332e;
+
+  font-size: 14px;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.recommendation-arrow {
+  margin-left: auto;
+
+  color: #496854;
+}
+
+.recommendation-message {
+  padding: 12px;
+
+  border-radius: 8px;
+
+  background: #f2f4f0;
+  color: #69736d;
+
+  font-size: 13px;
+}
+
+.recommendation-error {
+  margin-top: 16px;
+
+  background: #fff0ef;
+  color: #9a433d;
+}
+
+
 /* RESPONSIVE */
 
 @media (max-width: 1050px) {
@@ -910,8 +1214,21 @@
       column;
   }
 
+  .search-actions {
+    flex-direction: column;
+  }
+
   .search-bar {
     max-width: none;
+  }
+
+  .recommend-button {
+    width: 100%;
+  }
+
+  .recommendation-fields {
+    grid-template-columns:
+      1fr;
   }
 
   .restaurant-grid {

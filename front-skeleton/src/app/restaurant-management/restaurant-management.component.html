@@ -1,0 +1,306 @@
+<section class="restaurant-management">
+  <div class="restaurant-page-header">
+    <div>
+      <p class="restaurant-eyebrow">ADMINISTRATION</p>
+      <h2>Restaurant Management</h2>
+      <p class="restaurant-subtitle">
+        Create, edit and manage restaurants on the Rating platform.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="restaurant-secondary-button"
+      (click)="refreshRestaurants()"
+      [disabled]="loading"
+    >
+      Refresh
+    </button>
+  </div>
+
+  <!-- STATISTICS -->
+  <section class="restaurant-stats">
+    <div class="restaurant-stat-card">
+      <span class="restaurant-stat-number">
+        {{ restaurants.length }}
+      </span>
+      <span class="restaurant-stat-label">Total restaurants</span>
+    </div>
+
+    <div class="restaurant-stat-card">
+      <span class="restaurant-stat-number">
+        {{ filteredRestaurants.length }}
+      </span>
+      <span class="restaurant-stat-label">Matching results</span>
+    </div>
+  </section>
+
+  <!-- MESSAGES -->
+  <div
+    *ngIf="successMessage"
+    class="restaurant-message restaurant-success"
+    role="status"
+  >
+    {{ successMessage }}
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="restaurant-message restaurant-error"
+    role="alert"
+  >
+    {{ errorMessage }}
+  </div>
+
+  <!-- CREATE / EDIT FORM -->
+  <section class="restaurant-panel" id="restaurant-management-form">
+    <div class="restaurant-panel-header">
+      <div>
+        <h3>
+          {{ editingRestaurantId !== undefined
+          ? "Edit restaurant"
+          : "Add restaurant" }}
+        </h3>
+        <p>
+          {{
+            editingRestaurantId !== undefined
+              ? "Update the selected restaurant."
+              : "Enter the information for a new restaurant."
+          }}
+        </p>
+      </div>
+    </div>
+
+    <form
+      class="restaurant-form"
+      (ngSubmit)="saveRestaurant()"
+      #restaurantForm="ngForm"
+    >
+      <div class="restaurant-form-group">
+        <label for="restaurant-title">Restaurant name *</label>
+        <input
+          id="restaurant-title"
+          name="title"
+          type="text"
+          [(ngModel)]="formRestaurant.title"
+          placeholder="Le Petit Bistro"
+          required
+          maxlength="200"
+        />
+      </div>
+
+      <div class="restaurant-form-group">
+        <label for="restaurant-cuisine">Cuisine *</label>
+        <input
+          id="restaurant-cuisine"
+          name="cuisine"
+          type="text"
+          [(ngModel)]="formRestaurant.cuisine"
+          placeholder="French, Italian, Japanese..."
+          required
+          maxlength="100"
+        />
+      </div>
+
+      <div class="restaurant-form-group">
+        <label for="restaurant-address">Address</label>
+        <input
+          id="restaurant-address"
+          name="address"
+          type="text"
+          [(ngModel)]="formRestaurant.address"
+          placeholder="10 Rue de Paris, Paris"
+          maxlength="500"
+        />
+      </div>
+
+      <div class="restaurant-form-group">
+        <label for="restaurant-opening-hours">Opening hours</label>
+        <input
+          id="restaurant-opening-hours"
+          name="openingHours"
+          type="text"
+          [(ngModel)]="formRestaurant.openingHours"
+          placeholder="Monday-Friday, 12:00-22:00"
+          maxlength="500"
+        />
+      </div>
+
+      <div class="restaurant-form-group">
+        <label for="restaurant-image-url">Image URL</label>
+        <input
+          id="restaurant-image-url"
+          name="imageUrl"
+          type="url"
+          [(ngModel)]="formRestaurant.imageUrl"
+          placeholder="https://example.com/restaurant.jpg"
+          maxlength="2000"
+        />
+      </div>
+
+      <div
+        class="restaurant-image-preview"
+        *ngIf="formRestaurant.imageUrl.trim()"
+      >
+        <span>Image preview</span>
+        <img
+          [src]="formRestaurant.imageUrl"
+          alt="Restaurant preview"
+          (error)="formRestaurant.imageUrl && (formRestaurant.imageUrl = '')"
+        />
+      </div>
+
+      <div class="restaurant-form-actions">
+        <button
+          type="submit"
+          class="restaurant-primary-button"
+          [disabled]="saving || !restaurantForm.valid"
+        >
+          {{
+            saving
+              ? "Saving..."
+              : editingRestaurantId !== undefined
+                ? "Save changes"
+                : "Create restaurant"
+          }}
+        </button>
+
+        <button
+          *ngIf="editingRestaurantId !== undefined"
+          type="button"
+          class="restaurant-secondary-button"
+          [disabled]="saving"
+          (click)="cancelEdit()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- RESTAURANT LIST -->
+  <section class="restaurant-panel">
+    <div class="restaurant-panel-header">
+      <div>
+        <h3>Restaurants</h3>
+        <p>
+          {{ filteredRestaurants.length }} restaurant(s) found
+        </p>
+      </div>
+    </div>
+
+    <div class="restaurant-search">
+      <input
+        type="search"
+        aria-label="Search restaurants"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by ID, name, cuisine, address or opening hours..."
+      />
+
+      <button
+        type="button"
+        class="restaurant-secondary-button"
+        (click)="searchTerm = ''"
+      >
+        Clear
+      </button>
+    </div>
+
+    <div *ngIf="loading" class="restaurant-loading">
+      Loading restaurants...
+    </div>
+
+    <div
+      *ngIf="!loading && restaurants.length === 0 && !errorMessage"
+      class="restaurant-empty"
+    >
+      <h4>No restaurants yet</h4>
+      <p>Create your first restaurant using the form above.</p>
+    </div>
+
+    <div
+      *ngIf="
+        !loading &&
+        restaurants.length > 0 &&
+        filteredRestaurants.length === 0
+      "
+      class="restaurant-empty"
+    >
+      <h4>No matching restaurants</h4>
+      <p>Try another search term.</p>
+    </div>
+
+    <div
+      class="restaurant-table-wrapper"
+      *ngIf="!loading && filteredRestaurants.length > 0"
+    >
+      <table class="restaurant-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Restaurant</th>
+          <th>Cuisine</th>
+          <th>Address</th>
+          <th>Opening hours</th>
+          <th>Image</th>
+          <th class="restaurant-actions-column">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let restaurant of filteredRestaurants">
+          <td>#{{ restaurant.id ?? "—" }}</td>
+
+          <td>
+            <strong>{{ restaurant.title }}</strong>
+          </td>
+
+          <td>
+            {{ restaurant.cuisine || "—" }}
+          </td>
+
+          <td class="restaurant-address-cell">
+            {{ restaurant.address || "—" }}
+          </td>
+
+          <td>
+            {{ restaurant.openingHours || "—" }}
+          </td>
+
+          <td>
+            <img
+              *ngIf="restaurant.imageUrl"
+              class="restaurant-thumbnail"
+              [src]="restaurant.imageUrl"
+              [alt]="restaurant.title"
+              loading="lazy"
+              (error)="restaurant.imageUrl = ''"
+            />
+            <span *ngIf="!restaurant.imageUrl" class="restaurant-no-image">
+                No image
+              </span>
+          </td>
+
+          <td class="restaurant-actions-column">
+            <button
+              type="button"
+              class="restaurant-edit-button"
+              (click)="startEdit(restaurant)"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              class="restaurant-delete-button"
+              (click)="deleteRestaurant(restaurant)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>

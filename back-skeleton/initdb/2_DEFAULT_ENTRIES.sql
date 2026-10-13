@@ -125,4 +125,4 @@ VALUES
     (5, 'Service efficace', 'Le service était attentif et le repas bien organisé. Les saveurs italiennes étaient bien présentes.', 33, 3),
     (2, 'Mitigé', 'La cuisine était intéressante mais le service était un peu lent. Les saveurs italiennes étaient bien présentes.', 44, 3),
     (5, 'Bon moment', 'Service agréable et ambiance plaisante. Les saveurs italiennes étaient bien présentes.', 5, 3),
-    (2, 'Mitigé', 'La cuisine était intéressante mais le service était un peu lent. Les saveurs italiennes étaient bien présentes.', 16, 3),
+    (2, 'Mitigé', 'La cuisine était intéressante mais le service était un peu lent. Les saveurs italiennes étaient bien présentes.', 16, 3)

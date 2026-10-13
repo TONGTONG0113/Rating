@@ -29,6 +29,21 @@ export class RestaurantComponent implements OnInit {
   failedImages = new Set<number>()
 
   private readonly apiUrl = "http://localhost:8080/api/restaurants"
+  private readonly recommendationApiUrl = "http://localhost:8080/api/skills/restaurants/recommend"
+
+  recommendationOpen = false
+  recommendationLoading = false
+  recommendationSearched = false
+  recommendationError = ""
+
+  recommendationCuisine = "All"
+  recommendationMinRating = 0
+  recommendationLimit = 3
+
+  recommendations: Restaurant[] = []
+
+  readonly ratingOptions = [0, 3, 3.5, 4, 4.5]
+  readonly resultOptions = [1, 3, 5, 10]
 
   constructor(private http: HttpClient) {}
 
@@ -105,6 +120,49 @@ export class RestaurantComponent implements OnInit {
         this.loading = false
       },
     })
+  }
+
+  openRecommendation(): void {
+    this.recommendationOpen = true
+    this.recommendationError = ""
+  }
+
+  closeRecommendation(): void {
+    this.recommendationOpen = false
+  }
+
+  recommendRestaurants(): void {
+    this.recommendationLoading = true
+    this.recommendationSearched = true
+    this.recommendationError = ""
+    this.recommendations = []
+
+    const params = {
+      cuisine: this.recommendationCuisine,
+      minRating: this.recommendationMinRating.toString(),
+      limit: this.recommendationLimit.toString(),
+    }
+
+    this.http.get<Restaurant[]>(this.recommendationApiUrl, { params }).subscribe({
+      next: (data) => {
+        this.recommendations = data
+        this.recommendationLoading = false
+      },
+
+      error: (error) => {
+        console.error("Failed to load restaurant recommendations:", error)
+
+        this.recommendationError = "Unable to load recommendations. Please check that the backend is running."
+
+        this.recommendationLoading = false
+      },
+    })
+  }
+
+  onRecommendationBackdropClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeRecommendation()
+    }
   }
 
   onImageError(restaurantId: number): void {

@@ -2,7 +2,7 @@
 
 ## 1. Présentation du projet
 
-Rating est une application web permettant aux utilisateurs de découvrir des restaurants de paris, de consulter leurs informations et de visualiser les avis et les classements des restaurants.
+Rating est une application web permettant aux utilisateurs de découvrir des restaurants de Paris, de consulter leurs informations et de visualiser les avis et les classements des restaurants.
 
 ## 2. Fonctionnalités principales
 
@@ -30,7 +30,7 @@ Rating est une application web permettant aux utilisateurs de découvrir des res
 - Afficher la note moyenne et le nombre d'avis associés à chaque restaurant.
 - Cliquer sur une ligne du classement permet d'accéder directement à la page de détail du restaurant correspondant.
   
-### page d'accueil
+### Page des restaurants
 - Affiche tous les restaurants, et classés par type de cuisine (par ex. chinois, français).
 - Cliquer sur un restaurant permet d'en afficher les détails, tels que les notes.
 
@@ -97,42 +97,62 @@ Les outils suivants sont nécessaires :
 
 ## 7. Configuration
 
-Configurez la connexion à la base de données ainsi que les variables d'environnement nécessaires avant de démarrer le backend.
+Les variables d'environnement utilisées pour la base de données sont :
 
-Ne publiez pas de mots de passe, de clés API ou d'autres informations sensibles dans le dépôt Git.
+```dotenv
+DATABASE_USER=root
+DATABASE_PASSWORD=toor
+DATABASE_NAME=default-database
+```
 
-Consultez les fichiers de configuration du projet pour connaître les variables requises.
+Ces valeurs correspondent à la configuration locale de développement.
 
 ## 8. Installation et lancement
 
-### Démarrer la base de données
-
-Depuis le répertoire contenant le fichier Docker Compose :
+### Cloner le projet
 
 ```bash
+git clone https://github.com/TONGTONG0113/Rating.git
+cd Rating
+```
+
+### Démarrer la base de données
+
+```bash
+cd back-skeleton
 docker compose up -d
 ```
 
 ### Démarrer le backend
 
-Depuis le répertoire du backend :
+Sous PowerShell :
 
-```bash
+```powershell
+$env:DATABASE_NAME = "default-database"
+$env:DATABASE_USER = "root"
+$env:DATABASE_PASSWORD = "toor"
+
 mvn spring-boot:run
+```
+
+Le backend est disponible sur :
+
+```text
+http://localhost:8080
 ```
 
 ### Démarrer le frontend
 
-Depuis le répertoire du frontend :
+Dans un nouveau terminal :
 
 ```bash
+cd front-skeleton
 npm install
-ng serve
+npm start
 ```
 
-Ouvrez ensuite dans votre navigateur l'adresse locale indiquée par Angular.
+Le frontend est ensuite accessible à l'adresse indiquée par Angular.
 
-Les commandes et les chemins doivent être adaptés à la structure réelle du dépôt.
 
 ## 9. API REST
 

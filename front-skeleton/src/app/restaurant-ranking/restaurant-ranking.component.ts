@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
+import { Router } from "@angular/router"
 
 interface RestaurantRanking {
   restaurantId: number
@@ -18,20 +19,27 @@ export class RestaurantRankingComponent implements OnInit {
   loading = true
   error = false
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.http.get<RestaurantRanking[]>("http://localhost:8080/api/restaurants/ranking").subscribe({
       next: (data) => {
         console.log("Restaurant ranking data:", data)
+
         this.rankings = data
         this.loading = false
       },
+
       error: (err) => {
         console.error("Failed to load restaurant ranking", err)
+
         this.error = true
         this.loading = false
       },
     })
+  }
+
+  openRestaurant(restaurantId: number): void {
+    this.router.navigate(["/restaurants", restaurantId])
   }
 }

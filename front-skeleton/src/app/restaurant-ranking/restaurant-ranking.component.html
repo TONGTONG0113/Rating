@@ -1,42 +1,120 @@
-
 <div class="container mt-4">
-  <h2>🏆 Restaurant Ranking</h2>
-  <p>Restaurants ranked by average rating</p>
+
+  <h2>
+    🏆 Restaurant Ranking
+  </h2>
+
+  <p>
+    Restaurants ranked by average rating
+  </p>
+
 
   <div *ngIf="loading">
     Loading ranking...
   </div>
 
-  <div *ngIf="error" class="alert alert-danger">
-    Unable to load ranking. Please check that the backend is running.
+
+  <div
+    *ngIf="error"
+    class="alert alert-danger"
+  >
+    Unable to load ranking.
+    Please check that the backend is running.
   </div>
 
-  <div *ngIf="!loading && !error && rankings.length === 0">
+
+  <div
+    *ngIf="
+      !loading &&
+      !error &&
+      rankings.length === 0
+    "
+  >
     No restaurant rankings available yet.
   </div>
 
+
   <table
     class="table table-striped table-hover"
-    *ngIf="!loading && !error && rankings.length > 0"
+    *ngIf="
+      !loading &&
+      !error &&
+      rankings.length > 0
+    "
   >
+
     <thead>
+
     <tr>
-      <th>Rank</th>
-      <th>Restaurant Name</th>
-      <th>Average Rating</th>
-      <th>Number of Reviews</th>
+
+      <th>
+        Rank
+      </th>
+
+      <th>
+        Restaurant Name
+      </th>
+
+      <th>
+        Average Rating
+      </th>
+
+      <th>
+        Number of Reviews
+      </th>
+
     </tr>
+
     </thead>
 
+
     <tbody>
-    <tr *ngFor="let item of rankings; let i = index">
+
+    <tr
+      *ngFor="
+          let item of rankings;
+          let i = index
+        "
+      class="ranking-row"
+      tabindex="0"
+      (click)="
+          openRestaurant(
+            item.restaurantId
+          )
+        "
+      (keydown.enter)="
+          openRestaurant(
+            item.restaurantId
+          )
+        "
+    >
+
       <td>
-        <strong>{{ i + 1 }}</strong>
+        <strong>
+          {{ i + 1 }}
+        </strong>
       </td>
-      <td>{{ item.restaurantName }}</td>
-      <td>⭐ {{ item.averageRating.toFixed(2) }} / 5</td>
-      <td>{{ item.reviewCount }}</td>
+
+      <td>
+        {{ item.restaurantName }}
+      </td>
+
+      <td>
+        ⭐
+        {{
+          item.averageRating.toFixed(2)
+        }}
+        / 5
+      </td>
+
+      <td>
+        {{ item.reviewCount }}
+      </td>
+
     </tr>
+
     </tbody>
+
   </table>
+
 </div>

@@ -174,6 +174,7 @@ Les tests doivent être exécutés avant la remise du projet.
 
 ## 11. Skill
 Présenter ici:
+
 <img width="268" height="69" alt="image" src="https://github.com/user-attachments/assets/4324385f-d73d-4d1e-9b56-9d23aa9b0146" />
 
 
